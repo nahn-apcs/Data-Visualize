@@ -18,7 +18,9 @@
 cmake_minimum_required(VERSION 3.16)
 project(CMakeSFMLProject LANGUAGES CXX)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY 
+    ${CMAKE_BINARY_DIR}/bin
+)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(FetchContent)
@@ -46,7 +48,11 @@ FetchContent_MakeAvailable(json)
 
 file(GLOB SRCS CONFIGURE_DEPENDS
     ${CMAKE_SOURCE_DIR}/src/*.cpp
+    ${CMAKE_SOURCE_DIR}/src/begin_button/*.cpp
 )
+
+
+
 
 # option(CMAKE_USE_WIN32_THREADS_INIT "using WIN32 threads" ON)
 
@@ -58,7 +64,10 @@ endif()
 target_compile_features(game PRIVATE cxx_std_17)
 target_include_directories(game PRIVATE
     ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/include/begin_button
 )
+
+
 
 if(WIN32)
     add_custom_command(
