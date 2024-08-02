@@ -48,7 +48,6 @@ FetchContent_MakeAvailable(json)
 
 file(GLOB SRCS CONFIGURE_DEPENDS
     ${CMAKE_SOURCE_DIR}/src/*.cpp
-    ${CMAKE_SOURCE_DIR}/src/begin_button/*.cpp
 )
 
 
@@ -64,7 +63,7 @@ endif()
 target_compile_features(game PRIVATE cxx_std_17)
 target_include_directories(game PRIVATE
     ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/include/begin_button
+
 )
 
 
