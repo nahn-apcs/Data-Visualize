@@ -63,6 +63,8 @@ endif()
 target_compile_features(game PRIVATE cxx_std_17)
 target_include_directories(game PRIVATE
     ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/include/framework
+    ${CMAKE_SOURCE_DIR}/include/framework/profile
 
 )
 
