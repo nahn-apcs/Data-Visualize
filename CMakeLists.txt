@@ -48,6 +48,9 @@ FetchContent_MakeAvailable(json)
 
 file(GLOB SRCS CONFIGURE_DEPENDS
     ${CMAKE_SOURCE_DIR}/src/*.cpp
+    ${CMAKE_SOURCE_DIR}/src/entity/*.cpp
+    ${CMAKE_SOURCE_DIR}/src/framework/*.cpp
+    ${CMAKE_SOURCE_DIR}/src/screen/*.cpp
 )
 
 
@@ -65,6 +68,8 @@ target_include_directories(game PRIVATE
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/include/framework
     ${CMAKE_SOURCE_DIR}/include/framework/profile
+    ${CMAKE_SOURCE_DIR}/include/entity
+    ${CMAKE_SOURCE_DIR}/include/screen
 
 )
 

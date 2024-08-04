@@ -5,8 +5,23 @@
 
 enum class TextureID 
 {
-    nen
-    //enumerator
+    menu_bg = 0,
+    hash = 1,
+    avl = 2,
+    btree = 3,
+    heap = 4,
+    trie = 5,
+    graph = 6,
+    border_hash = 7,
+    border_avl = 8,
+    border_btree = 9,
+    border_heap = 10,
+    border_trie = 11,
+    border_graph = 12,
+    //Menu Screen
+
+    app_bg = 13,
+    //App Screen
 };
 
 enum class ImageID 
