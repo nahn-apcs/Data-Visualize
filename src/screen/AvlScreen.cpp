@@ -1,8 +1,8 @@
-#include <BtreeScreen.hpp>
+#include <AvlScreen.hpp>
 #include <MenuScreen.hpp>
 #include <SFML/Graphics.hpp>
 
-void BtreeScreen::run() {
+void AvlScreen::run() {
     ds.push_back(nhan(TextureID::app_bg, 0, 0));
 
     while(mWindow.isOpen()) {
@@ -12,18 +12,18 @@ void BtreeScreen::run() {
     }
 }
 
-void BtreeScreen::ProcessEvent() {
+void AvlScreen::ProcessEvent() {
     sf::Event event;
     while(mWindow.pollEvent(event)) {
         if (event.type == sf::Event::Closed) mWindow.close();
     }
 }
 
-void BtreeScreen::Update() {
+void AvlScreen::Update() {
 
 }
 
-void BtreeScreen::Render() {
+void AvlScreen::Render() {
     mWindow.clear();
     for(int i = 0; i < ds.size(); i++) {
         sf::Sprite sprite;

@@ -45,9 +45,29 @@ void MenuScreen::ProcessEvent()
                     sprite.setPosition(ds[i].pos_x, ds[i].pos_y);
                     sprite.setTexture(MyTexture.get(ds[i].a));
 
-                    if (i == 4 && sprite.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
+                    if (i == 1 && sprite.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
+                        HashScreen hashscreen(mWindow, MyTexture);
+                        hashscreen.run();
+                    }
+                    else if (i == 2 && sprite.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
+                        AvlScreen avlscreen(mWindow, MyTexture);
+                        avlscreen.run();
+                    }
+                    else if (i == 3 && sprite.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
+                        BtreeScreen btreescreen(mWindow, MyTexture);
+                        btreescreen.run();
+                    }
+                    else if (i == 4 && sprite.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
                         HeapScreen heapscreen(mWindow, MyTexture);
                         heapscreen.run();
+                    }
+                    else if (i == 5 && sprite.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
+                        TrieScreen triescreen(mWindow, MyTexture);
+                        triescreen.run();
+                    }
+                    else if (i == 6 && sprite.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
+                        GraphScreen graphscreen(mWindow, MyTexture);
+                        graphscreen.run();
                     }
                 }
             }
