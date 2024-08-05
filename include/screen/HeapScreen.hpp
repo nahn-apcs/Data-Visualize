@@ -7,7 +7,7 @@
 class HeapScreen 
 {
 public:
-    HeapScreen(sf::RenderWindow &parWindow, TextureHolder &parTexture): mWindow(parWindow), MyTexture(parTexture) {}
+    HeapScreen(sf::RenderWindow &parWindow, TextureHolder &parTexture): mWindow(parWindow), MyTexture(parTexture), Return(0) {}
     void            run();
 
 private:
@@ -24,7 +24,7 @@ private:
         nhan(TextureID _a, int _pos_x = 0, int _pos_y = 0): a(_a), pos_x(_pos_x), pos_y(_pos_y) {}
     };
     std::vector<nhan> ds;
-    
+    bool Return;
 };
 
 

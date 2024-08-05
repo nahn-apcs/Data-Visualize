@@ -125,4 +125,5 @@ void MenuScreen::AddTexture() {
     MyTexture.load(TextureID::border_trie, "res/menu_button/border_trie_button.png");
     MyTexture.load(TextureID::border_graph, "res/menu_button/border_graph_button.png");
     MyTexture.load(TextureID::app_bg, "res/background/background2.png");
+    MyTexture.load(TextureID::back_menu_button, "res/menu_button/arrow.png");
 }
