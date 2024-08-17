@@ -8,6 +8,11 @@ inline void ResourceHolder<Resource, Identifier>::load(Identifier id, const std:
     }
     //std::map<Identifier, std::unique_ptr<Resource>>::iterator ptr;
     auto inserted = mResourceMap.insert(std::make_pair(id, std::move(resource)));
+
+    if(inserted.second == 0) {
+        std::cerr << filename << "\n";
+    }
+
     assert(inserted.second);
 }
 

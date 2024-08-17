@@ -13,6 +13,7 @@ void MenuScreen::run()
     mWindow.setFramerateLimit(60);
 
     AddTexture();
+    AddFont();
 
     ds.push_back(nhan(TextureID::menu_bg, TextureID::menu_bg, 0, 0));
     ds.push_back(nhan(TextureID::hash, TextureID::border_hash, 122, 216));
@@ -58,7 +59,7 @@ void MenuScreen::ProcessEvent()
                         btreescreen.run();
                     }
                     else if (i == 4 && sprite.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
-                        HeapScreen heapscreen(mWindow, MyTexture);
+                        HeapScreen heapscreen(mWindow, MyTexture, MyFont);
                         heapscreen.run();
                     }
                     else if (i == 5 && sprite.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
@@ -126,4 +127,36 @@ void MenuScreen::AddTexture() {
     MyTexture.load(TextureID::border_graph, "res/menu_button/border_graph_button.png");
     MyTexture.load(TextureID::app_bg, "res/background/background2.png");
     MyTexture.load(TextureID::back_menu_button, "res/menu_button/arrow.png");
+    MyTexture.load(TextureID::cuc, "res/app_button/cuc.png");
+    MyTexture.load(TextureID::go_begin_disable, "res/app_button/go_begin_disable.png");
+    MyTexture.load(TextureID::go_begin_white, "res/app_button/go_begin_white.png");
+    MyTexture.load(TextureID::go_end_disable, "res/app_button/go_end_disable.png");
+    MyTexture.load(TextureID::go_end_white, "res/app_button/go_end_white.png");
+    MyTexture.load(TextureID::pause_button, "res/app_button/pause_button.png");
+    MyTexture.load(TextureID::play_button, "res/app_button/play_button.png");
+    MyTexture.load(TextureID::return_button, "res/app_button/return_button.png");
+    MyTexture.load(TextureID::speed_bar, "res/app_button/speed_bar.png");
+    MyTexture.load(TextureID::step_backward_disable, "res/app_button/step_backward_disable.png");
+    MyTexture.load(TextureID::step_backward_white, "res/app_button/step_backward_white.png");
+    MyTexture.load(TextureID::step_forward_disable, "res/app_button/step_forward_disable.png");
+    MyTexture.load(TextureID::step_forward_white, "res/app_button/step_forward_white.png");
+    MyTexture.load(TextureID::time_bar, "res/app_button/time_bar.png");
+    MyTexture.load(TextureID::tool_bar, "res/app_button/tool_bar.png");
+    MyTexture.load(TextureID::create_button, "res/app_button/create_button.png");
+    MyTexture.load(TextureID::create_button_in, "res/app_button/create_button_in.png");
+    MyTexture.load(TextureID::delete_button, "res/app_button/delete_button.png");
+    MyTexture.load(TextureID::delete_button_in, "res/app_button/delete_button_in.png");
+    MyTexture.load(TextureID::extractmax_button, "res/app_button/extractmax_button.png");
+    MyTexture.load(TextureID::extractmax_button_in, "res/app_button/extractmax_button_in.png");
+    MyTexture.load(TextureID::insert_button, "res/app_button/insert_button.png");
+    MyTexture.load(TextureID::insert_button_in, "res/app_button/insert_button_in.png");
+    MyTexture.load(TextureID::update_button, "res/app_button/update_button.png");
+    MyTexture.load(TextureID::update_button_in, "res/app_button/update_button_in.png");
+}
+
+void MenuScreen::AddFont() {
+    MyFont.load(FontID::arial_bold, "res/fonts/arial_bold.ttf");
+    MyFont.load(FontID::arial, "res/fonts/arial.ttf");
+    MyFont.load(FontID::consolas, "res/fonts/Consolas-Bold.ttf");
+    MyFont.load(FontID::ptsan, "res/fonts/PTSans-Bold.ttf");
 }

@@ -5,10 +5,15 @@
 #include <ResourceID.hpp>
 #include <iostream>
 
+
 class MenuScreen 
 {
 public:
-    MenuScreen(): mWindow(sf::VideoMode(1440, 900), "23125014 - Nguyen Thanh Nhan",sf::Style::Close) {}
+    MenuScreen() {
+        sf::ContextSettings settings;
+        settings.antialiasingLevel = 10;
+        mWindow.create(sf::VideoMode(1440, 900), "23125014 - Nguyen Thanh Nhan",sf::Style::Close, settings);
+    }
     void            run();
 
 
@@ -19,7 +24,9 @@ private:
     void                    Update();
     void                    Render();
     void                    AddTexture();
-    TextureHolder    MyTexture;
+    void                    AddFont();
+    TextureHolder           MyTexture;
+    FontHolder              MyFont;
 
     struct nhan {
         int pos_x;

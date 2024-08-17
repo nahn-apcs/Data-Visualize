@@ -8,7 +8,7 @@ void BtreeScreen::run() {
 
     while(mWindow.isOpen()) {
         ProcessEvent();
-        if(Return  == 1) break;
+        if(Return == 1) break;
         Update();
         Render();
     }
