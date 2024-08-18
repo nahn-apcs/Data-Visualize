@@ -2,61 +2,87 @@
 #include <MenuScreen.hpp>
 #include <SFML/Graphics.hpp>
 #include <math.h>
+#include <random>
+
+std::mt19937 rng(std::chrono::steady_clock::now().time_since_epoch().count());
+
+int rand(int l, int r) {
+    return l + rng() % (r - l + 1);
+}
 
 void HeapScreen::run() {
     //Add_image
-    ds.push_back(image(TextureID::app_bg, TextureID::app_bg, 0, 0, 0));
-    ds.push_back(image(TextureID::back_menu_button, TextureID::back_menu_button, 10, 10, 0));
-    ds.push_back(image(TextureID::create_button, TextureID::create_button_in, 0, 573, 0));
-    ds.push_back(image(TextureID::insert_button, TextureID::insert_button_in, 0, 623, 0));
-    ds.push_back(image(TextureID::extractmax_button, TextureID::extractmax_button_in, 0, 673, 0));
-    ds.push_back(image(TextureID::update_button, TextureID::update_button_in, 0, 723, 0));
-    ds.push_back(image(TextureID::delete_button, TextureID::delete_button_in, 0, 773, 0));
-    ds.push_back(image(TextureID::tool_bar, TextureID::tool_bar, 0, 842, 0));
-    ds.push_back(image(TextureID::time_bar, TextureID::time_bar, 468, 864, 0));
-    ds.push_back(image(TextureID::speed_bar, TextureID::speed_bar, 1182, 864, 0));
-    ds.push_back(image(TextureID::go_begin_disable, TextureID::go_begin_white, 190, 852, 0));
-    ds.push_back(image(TextureID::step_backward_disable, TextureID::step_backward_white, 243, 852, 0));
-    ds.push_back(image(TextureID::return_button, TextureID::return_button, 302, 854, 0));
-    ds.push_back(image(TextureID::play_button, TextureID::play_button, 298, 852, 1));
-    ds.push_back(image(TextureID::pause_button, TextureID::pause_button, 298, 852, 1));
-    ds.push_back(image(TextureID::step_forward_disable, TextureID::step_forward_white, 353, 852, 0));
-    ds.push_back(image(TextureID::go_end_disable, TextureID::go_end_white, 397, 852, 0));
-    ds.push_back(image(TextureID::cuc, TextureID::cuc, 1213, 864, 0)); //cuc speed
+    ds.push_back(image(TextureID::app_bg, TextureID::app_bg, 0, 0, 0));//0
+    ds.push_back(image(TextureID::back_menu_button, TextureID::back_menu_button, 10, 10, 0));//1
+    ds.push_back(image(TextureID::create_button, TextureID::create_button_in, 0, 567, 0));//2
+    ds.push_back(image(TextureID::insert_button, TextureID::insert_button_in, 0, 617, 0));//3
+    ds.push_back(image(TextureID::extractmax_button, TextureID::extractmax_button_in, 0, 667, 0));//4
+    ds.push_back(image(TextureID::update_button, TextureID::update_button_in, 0, 717, 0));//5
+    ds.push_back(image(TextureID::delete_button, TextureID::delete_button_in, 0, 767, 0));//6
+    ds.push_back(image(TextureID::tool_bar, TextureID::tool_bar, 0, 842, 0));//7
+    ds.push_back(image(TextureID::time_bar, TextureID::time_bar, 468, 864, 0));//8
+    ds.push_back(image(TextureID::speed_bar, TextureID::speed_bar, 1182, 864, 0));//9
+    ds.push_back(image(TextureID::go_begin_disable, TextureID::go_begin_white, 190, 852, 0));//10
+    ds.push_back(image(TextureID::step_backward_disable, TextureID::step_backward_white, 243, 852, 0));//11
+    ds.push_back(image(TextureID::return_button, TextureID::return_button, 302, 854, 0));//12
+    ds.push_back(image(TextureID::play_button, TextureID::play_button, 298, 852, 1));//13
+    ds.push_back(image(TextureID::pause_button, TextureID::pause_button, 298, 852, 1));//14
+    ds.push_back(image(TextureID::step_forward_disable, TextureID::step_forward_white, 353, 852, 0));//15
+    ds.push_back(image(TextureID::go_end_disable, TextureID::go_end_white, 397, 852, 0));//16
+    ds.push_back(image(TextureID::cuc, TextureID::cuc, 1213, 864, 0)); //cuc speed //17
+
+    //create
+    ds.push_back(image(TextureID::create_heap_input, TextureID::create_heap_input, 160, 567, 0));//18
+    ds.push_back(image(TextureID::random_button, TextureID::random_button, 243, 574, 0));//19
+    ds.push_back(image(TextureID::file_button, TextureID::file_button_in, 360, 567, 0));//20
+    ds.push_back(image(TextureID::go_button, TextureID::go_button_in, 300, 567, 0));//21
+
+    //insert
+    ds.push_back(image(TextureID::go_button, TextureID::go_button_in, 270, 617, 0));//22
+    ds.push_back(image(TextureID::val_heap_input, TextureID::val_heap_input, 160, 617, 0));//23
+
+    //update
+    ds.push_back(image(TextureID::i_heap_input, TextureID::i_heap_input, 160, 717, 0));//24
+    ds.push_back(image(TextureID::val_heap_input, TextureID::val_heap_input, 270, 717, 0));//25
+    ds.push_back(image(TextureID::go_button, TextureID::go_button_in, 380, 717, 0));//26
+
+
+    //delete
+    ds.push_back(image(TextureID::i_heap_input, TextureID::i_heap_input, 160, 767, 0));//27
+    ds.push_back(image(TextureID::go_button, TextureID::go_button_in, 270, 767, 0));//28
+
+
+    ds[27].input = 1;
+    ds[27].box_pos_x = 225;
+    ds[27].box_pos_y = 782;
+
+
+    ds[24].input = 1;
+    ds[24].box_pos_x = 225;
+    ds[24].box_pos_y = 732;
+
+
+    ds[25].input = 1;
+    ds[25].box_pos_x = 334;
+    ds[25].box_pos_y = 732;
+
+
+    ds[23].input = 1;
+    ds[23].box_pos_x = 225;
+    ds[23].box_pos_y = 632;
+
+
+    ds[18].input = 1;
+    ds[18].box_pos_x = 212;
+    ds[18].box_pos_y = 582;
+    
+
 
 
     reset_heap();
 
-    insert_heap(10);
 
 
-    insert_heap(11);
-    insert_heap(12);
-    insert_heap(13);
-
-    insert_heap(14);
-    insert_heap(15);
-    insert_heap(15);
-
-    insert_heap(14);
-    insert_heap(15);
-    insert_heap(15);
-
-    insert_heap(14);
-    insert_heap(15);
-    insert_heap(15);
-
-    insert_heap(14);
-    insert_heap(15);
-    insert_heap(15);
-
-   
-
-    extract_max();
-
-    update_pos(3, 99);
-
-    delete_pos(8);
 
 
 
@@ -64,8 +90,8 @@ void HeapScreen::run() {
 
     while(mWindow.isOpen()) {
         ProcessEvent();
-        if(Return  == 1) break;
         Update();
+        if(Return  == 1) break;
         Render();
     }
 }
@@ -74,34 +100,280 @@ void HeapScreen::ProcessEvent() {
     sf::Event event;
     while(mWindow.pollEvent(event)) {
         if (event.type == sf::Event::Closed) mWindow.close();
-        else if(event.type == sf::Event::MouseButtonPressed) 
+        if(event.type == sf::Event::MouseButtonPressed) 
         {
             if(event.mouseButton.button == sf::Mouse::Left) 
             {
-                sf::Vector2i mousePos = sf::Mouse::getPosition(mWindow);
-                sf::Sprite sprite;
-                sprite.setPosition(ds[1].pos_x, ds[1].pos_y);
-                sprite.setTexture(MyTexture.get(ds[1].a));
-                if(sprite.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
-                    Return = 1;
+                for(int i = 1; i < ds.size(); i++) {
+
+                    if(ds[i].disable) continue;
+
+                    sf::Vector2i mousePos = sf::Mouse::getPosition(mWindow);
+                    sf::Sprite sprite;
+
+                    sprite.setPosition(ds[i].pos_x, ds[i].pos_y);
+                    sprite.setTexture(MyTexture.get(ds[i].a));
+                    if(sprite.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
+
+                        if(i >= 2 && i <= 6) {
+                            for(int j = 2; j <= 6; j++) {
+                                ds[j].clicked = 0;
+                            }
+                        }
+                        else {
+                            for(int j = 1; j < ds.size(); j++) {
+                                if(j < 2 || j > 6) ds[j].clicked = 0;
+                            }
+                        }
+                        ds[i].clicked = 1;
+                    }
                 }
+            }
+        }
+        if(event.type == sf::Event::TextEntered) {
+            if((int)event.text.unicode == 8) {
+                back_space = 1;
+                so = 10;
+            }
+            else if((int)event.text.unicode >= 48 && (int)event.text.unicode <= 57) {
+                so = static_cast<char>(event.text.unicode) - '0';
+                back_space = 0;
             }
         }
     }
 }
 
+
 void HeapScreen::Update() {
+
+    if(ds[1].clicked == 1) Return = 1;
+
     for(int i = 2; i < ds.size(); i++) {
         sf::Vector2i mousePos = sf::Mouse::getPosition(mWindow);
         sf::Sprite sprite;
         sprite.setPosition(ds[i].pos_x, ds[i].pos_y);
         sprite.setTexture(MyTexture.get(ds[i].a));
 
-        if (sprite.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
+        if (sprite.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)) || ds[i].clicked) {
             ds[i].change = 1;
         } else {
             ds[i].change = 0;
         }
+    }
+
+    //create
+    if(ds[2].clicked == 1) {
+        ds[18].clicked = 1;
+        ds[18].disable = ds[19].disable = ds[20].disable = ds[21].disable = 0;
+    }
+    else {
+        ds[18].disable = ds[19].disable = ds[20].disable = ds[21].disable = 1;
+        ds[18].text = "";
+    }
+
+    //insert
+    if(ds[3].clicked == 1) {
+        ds[22].disable = ds[23].disable = 0;
+    }
+    else {
+        ds[22].disable = ds[23].disable = 1;
+        ds[23].text = "";
+    }
+
+
+
+    //update
+    if(ds[5].clicked == 1) {
+        ds[24].disable = ds[25].disable = ds[26].disable = 0;
+    }
+    else {
+        ds[24].disable = ds[25].disable = ds[26].disable = 1;
+        ds[24].text = "";
+        ds[25].text = "";
+    }
+
+    //delete
+    if(ds[6].clicked == 1) {
+        ds[27].disable = ds[28].disable = 0;
+    }
+    else {
+        ds[27].disable = ds[28].disable = 1;
+        ds[27].text = "";
+    }
+
+
+    //xử lí theo tác nhập từ bàn phím
+    if(ds[2].clicked) {
+        std::string& s = ds[18].text;
+        if(back_space == 1) {
+            if(s.size()) s.pop_back();
+        }
+        else if(so >= 0 && so < 10) {
+            s += char(so + '0');
+        }
+        modify_input(s, 1);
+    }
+    else if(ds[23].disable == 0 && ds[23].clicked) {
+        std::string& s = ds[23].text;
+        if(back_space == 1) {
+            if(s.size()) s.pop_back();
+        }
+        else if(so >= 0 && so < 10) {
+            s += char(so + '0');
+        }
+        modify_input(s, 3);
+    }
+    else if(ds[24].disable == 0 && ds[24].clicked) {
+        std::string& s = ds[24].text;
+        if(back_space == 1) {
+            if(s.size()) s.pop_back();
+        }
+        else if(so >= 0 && so < 10) {
+            s += char(so + '0');
+        }
+        modify_input(s, 2);
+    }
+    else if(ds[25].disable == 0 && ds[25].clicked) {
+        std::string& s = ds[25].text;
+        if(back_space == 1) {
+            if(s.size()) s.pop_back();
+        }
+        else if(so >= 0 && so < 10) {
+            s += char(so + '0');
+        }
+        modify_input(s, 3);      
+    }
+    else if(ds[27].disable == 0 && ds[27].clicked) {
+        std::string& s = ds[27].text;
+        if(back_space == 1) {
+            if(s.size()) s.pop_back();
+        }
+        else if(so >= 0 && so < 10) {
+            s += char(so + '0');
+        }
+        modify_input(s, 2);      
+    }
+
+    if(ds[19].clicked) {
+        int tmp = rand(1, 30);
+        ds[18].text = std::to_string(tmp);
+        ds[19].clicked = 0;
+    }
+
+    back_space = 0;
+    so = 10;
+
+    if(ds[21].clicked) {
+        tree_state.clear();
+        postition_state.clear();
+        cur_stage = 0;
+        ds_node.clear();
+        int n = 0;
+        for(int i = 0; i < ds[18].text.size(); i++) {
+            n = n * 10 + ds[18].text[i] - '0';
+        }
+        for(int i = 1; i <= n; i++) {
+            int val = rand(1, 99);
+            insert_heap(val);
+        }
+        ds[21].clicked = 0;
+    }
+
+    if(ds[22].clicked) {
+        tree_state.clear();
+        postition_state.clear();
+        tree_state.push_back(ds_node);
+        postition_state.push_back(ds_node);
+        cur_stage = 0;
+        int val = 0;
+        for(int i = 0; i < ds[23].text.size(); i++) {
+            val = val * 10 + ds[23].text[i] - '0';
+        }    
+        insert_heap(val);
+        ds[22].clicked = 0;
+    }
+
+    if(ds[4].clicked) {
+        tree_state.clear();
+        postition_state.clear();
+        tree_state.push_back(ds_node);
+        postition_state.push_back(ds_node);
+        cur_stage = 0;
+        extract_max();
+        ds[4].clicked = 0;
+    }
+
+    if(ds[26].clicked) {
+        tree_state.clear();
+        postition_state.clear();
+        tree_state.push_back(ds_node);
+        postition_state.push_back(ds_node);
+        cur_stage = 0;
+
+        int vt = 0;
+
+        for(int i = 0; i < ds[24].text.size(); i++) {
+            vt = vt * 10 + ds[24].text[i] - '0';
+        }
+
+        int val = 0;
+        for(int i = 0; i < ds[25].text.size(); i++) {
+            val = val * 10 + ds[25].text[i] - '0';
+        }
+
+        std::cout << vt << " " << val << "\n";
+
+        update_pos(vt, val);
+        ds[26].clicked = 0;
+    }
+
+
+    if(ds[28].clicked) {
+        tree_state.clear();
+        postition_state.clear();
+        tree_state.push_back(ds_node);
+        postition_state.push_back(ds_node);
+        cur_stage = 0;
+
+        int vt = 0;
+
+        for(int i = 0; i < ds[28].text.size(); i++) {
+            vt = vt * 10 + ds[28].text[i] - '0';
+        }
+
+        delete_pos(vt);
+        ds[28].clicked = 0;
+    }
+
+}
+
+void HeapScreen::modify_input(std::string &s, int t) {
+    if(t == 1) {
+        //n
+        int tmp = 0;
+        for(int i = 0; i < s.size(); i++) {
+            tmp = tmp * 10 + s[i] - '0';
+        }
+        if(tmp > 30) tmp = 30;
+        s = std::to_string(tmp);
+    }
+    else if(t == 2) {
+        //i
+        int tmp = 0;
+        for(int i = 0; i < s.size(); i++) {
+            tmp = tmp * 10 + s[i] - '0';
+        }
+        if(tmp > ds_node.size()) tmp = ds_node.size();
+        s = std::to_string(tmp);
+    }
+    else {
+        //val
+        int tmp = 0;
+        for(int i = 0; i < s.size(); i++) {
+            tmp = tmp * 10 + s[i] - '0';
+        }
+        if(tmp > 99) tmp = 99;
+        s = std::to_string(tmp);
     }
 }
 
@@ -117,6 +389,18 @@ void HeapScreen::render_image() {
             sprite.setTexture(MyTexture.get(ds[i].a));
         }
         mWindow.draw(sprite);
+
+        if(ds[i].input) {
+            sf::Text text;
+            text.setFont(MyFont.get(FontID::ptsan));
+            text.setString(ds[i].text);
+            text.setCharacterSize(15);
+            text.setFillColor(sf::Color::Black);
+
+            text.setPosition(ds[i].box_pos_x, ds[i].box_pos_y);
+
+            mWindow.draw(text);
+        }
     }
 }
 
@@ -129,28 +413,16 @@ void HeapScreen::Render() {
         draw_time_bar();
     }
 
+
+
     mWindow.display();
     cur_stage = cur_stage + is_play;
 }
 
-void HeapScreen::draw_time_bar() {
 
 
-    //rgb(116,255,188)
-    float per = 1.0 * (cur_stage + 1) / (int)tree_state.size();
 
-    sf::RectangleShape Line;
-
-    Line.setSize(sf::Vector2f(500.0f * per, 15));
-    Line.setFillColor(sf::Color(116, 225, 188));
-
-    // Đặt vị trí và góc cho hình chữ nhật
-    Line.setPosition(468, 864);
-
-    mWindow.draw(Line);
-
-}
-
+//reset
 void HeapScreen::reset_heap() {
     ds_node.clear();
     tree_state.clear();
@@ -399,6 +671,8 @@ void HeapScreen::set_ds_node() {
     }
 }
 
+//draw
+
 // Hàm để tính chiều dài của đường thẳng
 float length(const sf::Vector2f& start, const sf::Vector2f& end) {
     // Tính hiệu giữa tọa độ x và y của hai điểm
@@ -535,6 +809,24 @@ void HeapScreen::draw_node(int u, std::vector<node>& tree_state, std::vector<nod
     mWindow.draw(ID);
 
     return;
+
+}
+
+void HeapScreen::draw_time_bar() {
+
+
+    //rgb(116,255,188)
+    float per = 1.0 * (cur_stage + 1) / (int)tree_state.size();
+
+    sf::RectangleShape Line;
+
+    Line.setSize(sf::Vector2f(500.0f * per, 15));
+    Line.setFillColor(sf::Color(116, 225, 188));
+
+    // Đặt vị trí và góc cho hình chữ nhật
+    Line.setPosition(468, 864);
+
+    mWindow.draw(Line);
 
 }
 
@@ -690,6 +982,7 @@ void HeapScreen::down_heapify(int u) {
 
 void HeapScreen::update_pos(int vt, int val) {
 
+
     if(vt > ds_node.size()) return;
 
     ds_node[vt - 1].val = val;
@@ -734,3 +1027,4 @@ void HeapScreen::delete_pos(int vt) {
 
     return;
 }
+

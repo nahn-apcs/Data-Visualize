@@ -30,9 +30,14 @@ private:
         int pos_x;
         int pos_y;
         bool change;
-        bool disable;//danh cho nut start, play, stop
+        bool disable;
+        bool clicked = 0;
         TextureID a;
         TextureID b;
+        std::string text = "";
+        int box_pos_x = 0;
+        int box_pos_y = 0;
+        bool input = 0;
 
         image(TextureID _a, TextureID _b, int _pos_x = 0, int _pos_y = 0, int _d = 0): a(_a), b(_b), pos_x(_pos_x), pos_y(_pos_y), change(0), disable(_d) {}
     };
@@ -100,6 +105,12 @@ private:
 //delete_function
 private:
     void delete_pos(int vt);
+
+//o input
+private:
+    int so;
+    bool back_space;
+    void modify_input(std::string &s, int t);
 };
 
 

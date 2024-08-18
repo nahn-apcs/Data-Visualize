@@ -37,10 +37,11 @@ void MenuScreen::ProcessEvent()
     sf::Event event;
     while(mWindow.pollEvent(event)) {
         if (event.type == sf::Event::Closed) mWindow.close();
-        else if(event.type == sf::Event::MouseButtonPressed) 
+        if(event.type == sf::Event::MouseButtonPressed) 
         {
             if(event.mouseButton.button == sf::Mouse::Left) {
                 for(int i = 1; i < ds.size(); i++) {
+
                     sf::Vector2i mousePos = sf::Mouse::getPosition(mWindow);
                     sf::Sprite sprite;
                     sprite.setPosition(ds[i].pos_x, ds[i].pos_y);
@@ -61,6 +62,7 @@ void MenuScreen::ProcessEvent()
                     else if (i == 4 && sprite.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
                         HeapScreen heapscreen(mWindow, MyTexture, MyFont);
                         heapscreen.run();
+
                     }
                     else if (i == 5 && sprite.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
                         TrieScreen triescreen(mWindow, MyTexture);
@@ -72,7 +74,7 @@ void MenuScreen::ProcessEvent()
                     }
                 }
             }
-        }
+        }       
     }
 }
 
@@ -152,6 +154,14 @@ void MenuScreen::AddTexture() {
     MyTexture.load(TextureID::insert_button_in, "res/app_button/insert_button_in.png");
     MyTexture.load(TextureID::update_button, "res/app_button/update_button.png");
     MyTexture.load(TextureID::update_button_in, "res/app_button/update_button_in.png");
+    MyTexture.load(TextureID::create_heap_input, "res/app_button/create_heap_input.png");
+    MyTexture.load(TextureID::random_button, "res/app_button/random_button.png");
+    MyTexture.load(TextureID::file_button, "res/app_button/file_button.png");
+    MyTexture.load(TextureID::file_button_in, "res/app_button/file_button_in.png");
+    MyTexture.load(TextureID::go_button_in, "res/app_button/go_button_in.png");
+    MyTexture.load(TextureID::go_button, "res/app_button/go_button.png");
+    MyTexture.load(TextureID::val_heap_input, "res/app_button/val_heap_input.png");
+    MyTexture.load(TextureID::i_heap_input, "res/app_button/i_heap_input.png");
 }
 
 void MenuScreen::AddFont() {

@@ -47,6 +47,14 @@ enum class TextureID
     insert_button_in = 37,
     update_button = 38,
     update_button_in = 39,
+    file_button_in = 40,
+    create_heap_input = 41,
+    random_button = 42,
+    file_button = 43,
+    go_button = 44,
+    go_button_in = 45,
+    val_heap_input = 46,
+    i_heap_input = 47,
     //App Screen
 };
 
