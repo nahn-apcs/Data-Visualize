@@ -55,6 +55,8 @@ enum class TextureID
     go_button_in = 45,
     val_heap_input = 46,
     i_heap_input = 47,
+    search_button = 48,
+    search_button_in = 49,
     //App Screen
 };
 

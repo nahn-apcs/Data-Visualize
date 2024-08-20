@@ -48,7 +48,7 @@ void MenuScreen::ProcessEvent()
                     sprite.setTexture(MyTexture.get(ds[i].a));
 
                     if (i == 1 && sprite.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
-                        HashScreen hashscreen(mWindow, MyTexture);
+                        HashScreen hashscreen(mWindow, MyTexture, MyFont);
                         hashscreen.run();
                     }
                     else if (i == 2 && sprite.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
@@ -162,6 +162,8 @@ void MenuScreen::AddTexture() {
     MyTexture.load(TextureID::go_button, "res/app_button/go_button.png");
     MyTexture.load(TextureID::val_heap_input, "res/app_button/val_heap_input.png");
     MyTexture.load(TextureID::i_heap_input, "res/app_button/i_heap_input.png");
+    MyTexture.load(TextureID::search_button, "res/app_button/search_button.png");
+    MyTexture.load(TextureID::search_button_in, "res/app_button/search_button_in.png");
 }
 
 void MenuScreen::AddFont() {

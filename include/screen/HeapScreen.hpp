@@ -8,6 +8,7 @@
 #include <vector>
 
 
+
 class HeapScreen 
 {
 public:
@@ -22,6 +23,7 @@ private:
 
     bool Return;
     bool is_play = 1;
+    float speed = 1.0f;
 
 //image
 private:
@@ -38,6 +40,8 @@ private:
         int box_pos_x = 0;
         int box_pos_y = 0;
         bool input = 0;
+        bool pressed = 0;
+        bool released = 0;
 
         image(TextureID _a, TextureID _b, int _pos_x = 0, int _pos_y = 0, int _d = 0): a(_a), b(_b), pos_x(_pos_x), pos_y(_pos_y), change(0), disable(_d) {}
     };

@@ -3,12 +3,16 @@
 #include <SFML/Graphics.hpp>
 #include <math.h>
 #include <random>
+#include <tinyfiledialogs.h>
+#include <fstream>
 
-std::mt19937 rng(std::chrono::steady_clock::now().time_since_epoch().count());
+std::mt19937 rng_4(std::chrono::steady_clock::now().time_since_epoch().count());
 
-int rand(int l, int r) {
-    return l + rng() % (r - l + 1);
+int rand_4(int l, int r) {
+    return l + rng_4() % (r - l + 1);
 }
+
+
 
 void HeapScreen::run() {
     //Add_image
@@ -29,7 +33,7 @@ void HeapScreen::run() {
     ds.push_back(image(TextureID::pause_button, TextureID::pause_button, 298, 852, 1));//14
     ds.push_back(image(TextureID::step_forward_disable, TextureID::step_forward_white, 353, 852, 0));//15
     ds.push_back(image(TextureID::go_end_disable, TextureID::go_end_white, 397, 852, 0));//16
-    ds.push_back(image(TextureID::cuc, TextureID::cuc, 1213, 864, 0)); //cuc speed //17
+    ds.push_back(image(TextureID::cuc, TextureID::cuc, 1182, 864, 0)); //cuc speed //17
 
     //create
     ds.push_back(image(TextureID::create_heap_input, TextureID::create_heap_input, 160, 567, 0));//18
@@ -80,12 +84,6 @@ void HeapScreen::run() {
 
 
     reset_heap();
-
-
-
-
-
-
     cur_stage = 0;
 
     while(mWindow.isOpen()) {
@@ -121,12 +119,23 @@ void HeapScreen::ProcessEvent() {
                             }
                         }
                         else {
-                            for(int j = 1; j < ds.size(); j++) {
-                                if(j < 2 || j > 6) ds[j].clicked = 0;
+                            for(int j = 18; j <= 28; j++) {
+                                ds[j].clicked = 0;
                             }
                         }
                         ds[i].clicked = 1;
+                        if(i == 17) ds[i].pressed = 1;
                     }
+                }
+            }
+        }
+        if(event.type == sf::Event::MouseButtonReleased) 
+        {
+            if(event.mouseButton.button == sf::Mouse::Left) 
+            {
+                if(ds[17].pressed == 1) {
+                    ds[17].pressed = 0;
+                    ds[17].released = 1;
                 }
             }
         }
@@ -255,13 +264,71 @@ void HeapScreen::Update() {
     }
 
     if(ds[19].clicked) {
-        int tmp = rand(1, 30);
+        int tmp = rand_4(1, 30);
         ds[18].text = std::to_string(tmp);
         ds[19].clicked = 0;
     }
 
     back_space = 0;
     so = 10;
+
+    if(ds[20].clicked) {
+
+        const char *filterPatterns[] = { "*.txt"};
+        const char *filePath = tinyfd_openFileDialog(
+            "Open an Image File",         // Tiêu đề
+            "",                           // Không có đường dẫn và tên file mặc định
+            1,                            // 3 kiểu file lọc
+            filterPatterns,               // Mảng chứa các kiểu file lọc
+            NULL,                         // Không có mô tả cho các kiểu file
+            0                             // Không cho phép chọn nhiều file
+        );
+
+        if(filePath != NULL) {
+            std::ifstream fin;
+            fin.open(filePath);
+
+            std::vector<int>a;
+
+            if(fin.is_open()) {
+                std::string s;
+                int d = 0;
+                while(getline(fin, s)) {
+                    int tmp = 0;
+                    for(int i = 0; i < s.size(); i++) {
+                        if(s[i] == ' ') {
+                            a.push_back(tmp);
+                            tmp = 0;
+                        }
+                        else {
+                            tmp = tmp * 10 + s[i] - '0';
+                        }
+                    }
+                    a.push_back(tmp);
+                }
+            }
+            if(a.size() <= 30) {
+                ds_node.clear();
+                tree_state.clear();
+                postition_state.clear();
+                tree_state.push_back(ds_node);
+                postition_state.push_back(ds_node);
+                cur_stage = 0;
+                for(int i = 0; i < a.size(); i++) {
+                    insert_heap(a[i]);
+                }
+                is_play = 1;
+                ds[14].disable = 0;
+                ds[13].disable = 1;
+                ds[12].disable = 1;
+            }
+
+
+            fin.close();
+        }
+
+        ds[20].clicked = 0;
+    }
 
     if(ds[21].clicked) {
         tree_state.clear();
@@ -273,10 +340,14 @@ void HeapScreen::Update() {
             n = n * 10 + ds[18].text[i] - '0';
         }
         for(int i = 1; i <= n; i++) {
-            int val = rand(1, 99);
+            int val = rand_4(1, 99);
             insert_heap(val);
         }
         ds[21].clicked = 0;
+        is_play = 1;
+        ds[14].disable = 0;
+        ds[13].disable = 1;
+        ds[12].disable = 1;
     }
 
     if(ds[22].clicked) {
@@ -291,6 +362,10 @@ void HeapScreen::Update() {
         }    
         insert_heap(val);
         ds[22].clicked = 0;
+        is_play = 1;
+        ds[14].disable = 0;
+        ds[13].disable = 1;
+        ds[12].disable = 1;
     }
 
     if(ds[4].clicked) {
@@ -301,6 +376,10 @@ void HeapScreen::Update() {
         cur_stage = 0;
         extract_max();
         ds[4].clicked = 0;
+        is_play = 1;
+        ds[14].disable = 0;
+        ds[13].disable = 1;
+        ds[12].disable = 1;
     }
 
     if(ds[26].clicked) {
@@ -321,10 +400,13 @@ void HeapScreen::Update() {
             val = val * 10 + ds[25].text[i] - '0';
         }
 
-        std::cout << vt << " " << val << "\n";
 
         update_pos(vt, val);
         ds[26].clicked = 0;
+        is_play = 1;
+        ds[14].disable = 0;
+        ds[13].disable = 1;
+        ds[12].disable = 1;
     }
 
 
@@ -337,12 +419,102 @@ void HeapScreen::Update() {
 
         int vt = 0;
 
-        for(int i = 0; i < ds[28].text.size(); i++) {
-            vt = vt * 10 + ds[28].text[i] - '0';
+        for(int i = 0; i < ds[27].text.size(); i++) {
+            vt = vt * 10 + ds[27].text[i] - '0';
         }
 
         delete_pos(vt);
         ds[28].clicked = 0;
+        is_play = 1;
+        ds[14].disable = 0;
+        ds[13].disable = 1;
+        ds[12].disable = 1;
+    }
+
+    //full_back
+    if(ds[10].clicked) {
+        cur_stage = 0;
+        ds[10].clicked = 0;
+        is_play = 0;
+        ds[13].disable = 0;
+        ds[14].disable = 1;
+        ds[12].disable = 1;
+    }
+
+
+    //back_step
+
+    if(ds[11].clicked) {
+        cur_stage -= 30;
+        if(cur_stage < 0) cur_stage = 0;
+        ds[11].clicked = 0;
+        is_play = 0;
+        ds[13].disable = 0;
+        ds[14].disable = 1;
+        ds[12].disable = 1;
+    }
+
+    //return
+    if(ds[12].clicked) {
+        cur_stage = 0;
+        ds[12].clicked = 0;
+        ds[12].disable = 1;
+        ds[14].disable = 0;
+        is_play = 1;
+    }
+
+    //play
+    if(ds[13].clicked) {
+        ds[13].clicked = 0;
+        ds[13].disable = 1;
+        ds[14].disable = 0;
+        is_play = 1;
+        ds[12].disable = 1;
+    }
+
+
+    //pause
+    if(ds[14].clicked) {
+        ds[14].clicked = 0;
+        is_play = 0;
+        ds[13].disable = 0;
+        ds[14].disable = 1;
+        ds[12].disable = 1;
+    }
+
+
+    //go_step
+    if(ds[15].clicked) {
+        ds[15].clicked = 0;
+        cur_stage += 30;
+        if(cur_stage >= tree_state.size()) cur_stage = tree_state.size() - 1;
+        is_play = 0;
+        ds[13].disable = 0;
+        ds[14].disable = 1;
+        ds[12].disable = 1;
+    }
+
+    //full_go
+    if(ds[16].clicked) {
+        ds[16].clicked = 0;
+        cur_stage = tree_state.size() - 1;
+        is_play = 0;
+        ds[13].disable = 0;
+        ds[14].disable = 1;
+        ds[12].disable = 1;
+    }
+
+
+    //speed_button
+    if(ds[17].pressed) {
+        sf::Vector2i mousePos = sf::Mouse::getPosition(mWindow);
+        ds[17].pos_x = mousePos.x;
+        ds[17].pos_x = std::max(ds[17].pos_x, 1182);
+        ds[17].pos_x = std::min(ds[17].pos_x, 1317);
+    }
+    if(ds[17].released) {
+        ds[17].released = 0;
+        speed = 1.0 * (ds[17].pos_x - 1182) / 135 * 4 + 1;
     }
 
 }
@@ -416,7 +588,13 @@ void HeapScreen::Render() {
 
 
     mWindow.display();
-    cur_stage = cur_stage + is_play;
+    cur_stage = cur_stage + is_play * (int)speed;
+    cur_stage = std::min(cur_stage, (int)tree_state.size() - 1);
+    if(cur_stage == tree_state.size() - 1) {
+        is_play = 0;
+        ds[13].disable = ds[14].disable = 1;
+        ds[12].disable = 0;
+    }
 }
 
 
@@ -451,7 +629,7 @@ void HeapScreen::insert_heap(int val) {
         dfs_inoder(1, 0);
 
 
-        animation_shift_tree_new_node(0.35f);
+        animation_shift_tree_new_node(0.5f);
 
         up_heapify(ds_node.size());
     }
@@ -547,7 +725,7 @@ void HeapScreen::up_heapify(int u) {
     if(ds_node[cha - 1].val < ds_node[u - 1].val) {
 
 
-        animation_swap_node(cha, u, 0.35f);
+        animation_swap_node(cha, u, 0.5f);
         up_heapify(u / 2);
     }
     return;
@@ -983,7 +1161,7 @@ void HeapScreen::down_heapify(int u) {
 void HeapScreen::update_pos(int vt, int val) {
 
 
-    if(vt > ds_node.size()) return;
+    if(vt > ds_node.size() || vt == 0) return;
 
     ds_node[vt - 1].val = val;
     for(int i = 0; i < ds_node.size(); i++) {
@@ -1007,7 +1185,8 @@ void HeapScreen::update_pos(int vt, int val) {
 }
 
 void HeapScreen::delete_pos(int vt) {
-    if(vt > ds_node.size()) return;
+
+    if(vt > ds_node.size() || vt == 0) return;
     
     int val = ds_node[0].val + 1;
     ds_node[vt - 1].val = val;
