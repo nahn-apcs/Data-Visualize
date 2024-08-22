@@ -115,6 +115,11 @@ private:
     int so;
     bool back_space;
     void modify_input(std::string &s, int t);
+
+//math function
+private:
+    float length(const sf::Vector2f& start, const sf::Vector2f& end);
+    float angle(const sf::Vector2f& start, const sf::Vector2f& end);
 };
 
 

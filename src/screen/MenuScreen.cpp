@@ -23,7 +23,6 @@ void MenuScreen::run()
     ds.push_back(nhan(TextureID::trie, TextureID::border_trie, 570, 560));
     ds.push_back(nhan(TextureID::graph, TextureID::border_graph, 1018, 560));
 
-    //HeapScreen heapscreen(mWindow);
 
     while(mWindow.isOpen()) {
         ProcessEvent();
@@ -154,16 +153,17 @@ void MenuScreen::AddTexture() {
     MyTexture.load(TextureID::insert_button_in, "res/app_button/insert_button_in.png");
     MyTexture.load(TextureID::update_button, "res/app_button/update_button.png");
     MyTexture.load(TextureID::update_button_in, "res/app_button/update_button_in.png");
-    MyTexture.load(TextureID::create_heap_input, "res/app_button/create_heap_input.png");
+    MyTexture.load(TextureID::n_input, "res/app_button/n_input.png");
     MyTexture.load(TextureID::random_button, "res/app_button/random_button.png");
     MyTexture.load(TextureID::file_button, "res/app_button/file_button.png");
     MyTexture.load(TextureID::file_button_in, "res/app_button/file_button_in.png");
     MyTexture.load(TextureID::go_button_in, "res/app_button/go_button_in.png");
     MyTexture.load(TextureID::go_button, "res/app_button/go_button.png");
-    MyTexture.load(TextureID::val_heap_input, "res/app_button/val_heap_input.png");
-    MyTexture.load(TextureID::i_heap_input, "res/app_button/i_heap_input.png");
+    MyTexture.load(TextureID::val_input, "res/app_button/val_input.png");
+    MyTexture.load(TextureID::i_input, "res/app_button/i_input.png");
     MyTexture.load(TextureID::search_button, "res/app_button/search_button.png");
     MyTexture.load(TextureID::search_button_in, "res/app_button/search_button_in.png");
+    MyTexture.load(TextureID::m_input, "res/app_button/m_input.png");
 }
 
 void MenuScreen::AddFont() {

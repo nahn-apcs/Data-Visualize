@@ -36,23 +36,23 @@ void HeapScreen::run() {
     ds.push_back(image(TextureID::cuc, TextureID::cuc, 1182, 864, 0)); //cuc speed //17
 
     //create
-    ds.push_back(image(TextureID::create_heap_input, TextureID::create_heap_input, 160, 567, 0));//18
+    ds.push_back(image(TextureID::n_input, TextureID::n_input, 160, 567, 0));//18
     ds.push_back(image(TextureID::random_button, TextureID::random_button, 243, 574, 0));//19
     ds.push_back(image(TextureID::file_button, TextureID::file_button_in, 360, 567, 0));//20
     ds.push_back(image(TextureID::go_button, TextureID::go_button_in, 300, 567, 0));//21
 
     //insert
     ds.push_back(image(TextureID::go_button, TextureID::go_button_in, 270, 617, 0));//22
-    ds.push_back(image(TextureID::val_heap_input, TextureID::val_heap_input, 160, 617, 0));//23
+    ds.push_back(image(TextureID::val_input, TextureID::val_input, 160, 617, 0));//23
 
     //update
-    ds.push_back(image(TextureID::i_heap_input, TextureID::i_heap_input, 160, 717, 0));//24
-    ds.push_back(image(TextureID::val_heap_input, TextureID::val_heap_input, 270, 717, 0));//25
+    ds.push_back(image(TextureID::i_input, TextureID::i_input, 160, 717, 0));//24
+    ds.push_back(image(TextureID::val_input, TextureID::val_input, 270, 717, 0));//25
     ds.push_back(image(TextureID::go_button, TextureID::go_button_in, 380, 717, 0));//26
 
 
     //delete
-    ds.push_back(image(TextureID::i_heap_input, TextureID::i_heap_input, 160, 767, 0));//27
+    ds.push_back(image(TextureID::i_input, TextureID::i_input, 160, 767, 0));//27
     ds.push_back(image(TextureID::go_button, TextureID::go_button_in, 270, 767, 0));//28
 
 
@@ -147,6 +147,31 @@ void HeapScreen::ProcessEvent() {
             else if((int)event.text.unicode >= 48 && (int)event.text.unicode <= 57) {
                 so = static_cast<char>(event.text.unicode) - '0';
                 back_space = 0;
+            }
+        }
+        if(event.type == sf::Event::KeyPressed) {
+            if(event.key.code == sf::Keyboard::Up) {
+                ds[16].clicked = 1;
+            }
+            else if(event.key.code == sf::Keyboard::Down) {
+                ds[10].clicked = 1;
+            }
+            else if(event.key.code == sf::Keyboard::Left) {
+                ds[11].clicked = 1;
+            }
+            else if(event.key.code == sf::Keyboard::Right) {
+                ds[15].clicked = 1;
+            }
+            else if(event.key.code == sf::Keyboard::Space) {
+                if(ds[12].disable == 0) {
+                    ds[12].clicked = 1;
+                }
+                else if(ds[13].disable == 0) {
+                    ds[13].clicked = 1;
+                }
+                else if(ds[14].disable == 0) {
+                    ds[14].clicked = 1;
+                }
             }
         }
     }
@@ -852,7 +877,7 @@ void HeapScreen::set_ds_node() {
 //draw
 
 // Hàm để tính chiều dài của đường thẳng
-float length(const sf::Vector2f& start, const sf::Vector2f& end) {
+float HeapScreen::length(const sf::Vector2f& start, const sf::Vector2f& end) {
     // Tính hiệu giữa tọa độ x và y của hai điểm
     float dx = end.x - start.x;
     float dy = end.y - start.y;
@@ -862,13 +887,13 @@ float length(const sf::Vector2f& start, const sf::Vector2f& end) {
 }
 
 // Hàm để tính góc của đường thẳng (tính bằng radian)
-float angle(const sf::Vector2f& start, const sf::Vector2f& end) {
+float HeapScreen::angle(const sf::Vector2f& start, const sf::Vector2f& end) {
     // Tính hiệu giữa tọa độ x và y của hai điểm
     float dy = end.y - start.y;
     float dx = end.x - start.x;
     
     // Tính góc theo hàm atan2
-    return std::atan2(dy, dx);
+    return std::atan2(dy, dx) * 180 / 3.14159265f;
 }
 
 void HeapScreen::draw_heap(std::vector<node>& tree_stage, std::vector<node>& postition_stage) {
@@ -894,11 +919,11 @@ void HeapScreen::draw_node(int u, std::vector<node>& tree_state, std::vector<nod
         // Thiết lập kích thước và góc cho hình chữ nhật
         Line.setSize(sf::Vector2f(lineLength, thickness));
         Line.setFillColor(sf::Color(0, 0, 0, postition_state[u - 1].per_edge_l));
-        Line.setOrigin(thickness / 2, 0); // Đặt tâm hình chữ nhật để xoay
+        Line.setOrigin(0, thickness / 2); // Đặt tâm hình chữ nhật để xoay
 
         // Đặt vị trí và góc cho hình chữ nhật
         Line.setPosition(start);
-        Line.setRotation(angle(start, end) * 180 / 3.14159265f); // Chuyển đổi từ radian sang độ
+        Line.setRotation(angle(start, end)); // Chuyển đổi từ radian sang độ
 
         mWindow.draw(Line);
 
@@ -920,11 +945,11 @@ void HeapScreen::draw_node(int u, std::vector<node>& tree_state, std::vector<nod
         // Thiết lập kích thước và góc cho hình chữ nhật
         Line.setSize(sf::Vector2f(lineLength, thickness));
         Line.setFillColor(sf::Color(0, 0, 0, postition_state[u - 1].per_edge_r));
-        Line.setOrigin(thickness / 2, 0); // Đặt tâm hình chữ nhật để xoay
+        Line.setOrigin(0, thickness / 2); // Đặt tâm hình chữ nhật để xoay
 
         // Đặt vị trí và góc cho hình chữ nhật
         Line.setPosition(start);
-        Line.setRotation(angle(start, end) * 180 / 3.14159265f); // Chuyển đổi từ radian sang độ
+        Line.setRotation(angle(start, end)); // Chuyển đổi từ radian sang độ
 
         mWindow.draw(Line);
 
