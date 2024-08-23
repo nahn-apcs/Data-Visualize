@@ -56,7 +56,7 @@ void HashScreen::new_ds_node(int m) {
     }
 
     reset_ds_node(ds_node);
-    cur_stage = 0;
+    cur_state = 0;
 
 
     for(int i = 0; i < m; i++) {
@@ -463,7 +463,7 @@ void HashScreen::Update() {
             }
 
             new_ds_node(m);
-            cur_stage = 0;
+            cur_state = 0;
 
             for(int i = 0; i < a.size(); i++) {
                 insert_hash(a[i]);
@@ -486,7 +486,7 @@ void HashScreen::Update() {
             reset_ds_node(hash_state.back());
             hash_state.pop_back();
         }
-        cur_stage = 0;
+        cur_state = 0;
         int tmp = 0;
         for(int i = 0; i < ds[23].text.size(); i++) {
             tmp = tmp * 10 + ds[23].text[i] - '0';
@@ -506,7 +506,7 @@ void HashScreen::Update() {
             reset_ds_node(hash_state.back());
             hash_state.pop_back();
         }
-        cur_stage = 0;
+        cur_state = 0;
         int tmp = 0;
         for(int i = 0; i < ds[25].text.size(); i++) {
             tmp = tmp * 10 + ds[25].text[i] - '0';
@@ -527,7 +527,7 @@ void HashScreen::Update() {
             reset_ds_node(hash_state.back());
             hash_state.pop_back();
         }
-        cur_stage = 0;
+        cur_state = 0;
         for(int i = 0; i < ds[27].text.size(); i++) {
             tmp = tmp * 10 + ds[27].text[i] - '0';
         }
@@ -541,7 +541,7 @@ void HashScreen::Update() {
 
     //full_back
     if(ds[9].clicked) {
-        cur_stage = 0;
+        cur_state = 0;
         ds[9].clicked = 0;
         is_play = 0;
         ds[12].disable = 0;
@@ -553,8 +553,8 @@ void HashScreen::Update() {
     //back_step
 
     if(ds[10].clicked) {
-        cur_stage -= 30;
-        if(cur_stage < 0) cur_stage = 0;
+        cur_state -= 30;
+        if(cur_state < 0) cur_state = 0;
         ds[10].clicked = 0;
         is_play = 0;
         ds[12].disable = 0;
@@ -564,7 +564,7 @@ void HashScreen::Update() {
 
     //return
     if(ds[11].clicked) {
-        cur_stage = 0;
+        cur_state = 0;
         ds[11].clicked = 0;
         ds[11].disable = 1;
         ds[13].disable = 0;
@@ -594,8 +594,8 @@ void HashScreen::Update() {
     //go_step
     if(ds[14].clicked) {
         ds[14].clicked = 0;
-        cur_stage += 30;
-        if(cur_stage >= hash_state.size()) cur_stage = hash_state.size() - 1;
+        cur_state += 30;
+        if(cur_state >= hash_state.size()) cur_state = hash_state.size() - 1;
         is_play = 0;
         ds[12].disable = 0;
         ds[13].disable = 1;
@@ -605,7 +605,7 @@ void HashScreen::Update() {
     //full_go
     if(ds[15].clicked) {
         ds[15].clicked = 0;
-        cur_stage = hash_state.size() - 1;
+        cur_state = hash_state.size() - 1;
         is_play = 0;
         ds[12].disable = 0;
         ds[13].disable = 1;
@@ -677,19 +677,19 @@ void HashScreen::render_image() {
 void HashScreen::Render() {
     mWindow.clear();
     render_image();
-    cur_stage = std::min(cur_stage, (int)hash_state.size() - 1);
-    if(cur_stage >= 0 && cur_stage < hash_state.size()) {
-        draw_hash(hash_state[cur_stage]);
+    cur_state = std::min(cur_state, (int)hash_state.size() - 1);
+    if(cur_state >= 0 && cur_state < hash_state.size()) {
+        draw_hash(hash_state[cur_state]);
         draw_time_bar();
     }
 
 
 
     mWindow.display();
-    cur_stage = cur_stage + is_play * (int)speed;
-    cur_stage = std::min(cur_stage, (int)hash_state.size() - 1);
-    if(cur_stage == hash_state.size() - 1) {
-        //is_play = 0;
+    cur_state = cur_state + is_play * (int)speed;
+    cur_state = std::min(cur_state, (int)hash_state.size() - 1);
+    if(cur_state == hash_state.size() - 1) {
+        is_play = 0;
         ds[12].disable = ds[13].disable = 1;
         ds[11].disable = 0;
     }
@@ -1154,7 +1154,7 @@ void HashScreen::draw_time_bar() {
 
 
     //rgb(116,255,188)
-    float per = 1.0 * (cur_stage + 1) / (int)hash_state.size();
+    float per = 1.0 * (cur_state + 1) / (int)hash_state.size();
 
     sf::RectangleShape Line;
 

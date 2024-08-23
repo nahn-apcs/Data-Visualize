@@ -111,7 +111,7 @@ private:
 //animation
 private:
     std::vector<std::vector<node>>hash_state;
-    int cur_stage = 0;
+    int cur_state = 0;
 
 //text
 private:
