@@ -17,6 +17,7 @@ void HashScreen::reset_node(node *tmp) {
         reset_node(tmp->child);
     }
     delete tmp;
+    tmp = NULL;
 }
 void HashScreen::reset_ds_node(std::vector<node>&tmp) {
     for(int i = 0; i < tmp.size(); i++) {
@@ -987,6 +988,7 @@ void HashScreen::dfs_delete(node *tmp, node *par, int need) {
         animation_shift_node_up(tmp, 0.5f);
         par->child = tmp->child;
         delete tmp;
+        tmp = NULL;
     }
     else {
         dfs_delete(tmp->child, tmp, need);

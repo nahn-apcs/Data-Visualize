@@ -72,8 +72,12 @@ private:
         node *par = NULL;
         int vt; //Thứ tự thăm dfs
 
-        float per_edge = 255.0f;//lưu ý là nối từ nó lên cha
-        float per_progress = 0; //để tô màu cạnh
+        int hi_down = 0;//độ cao từ dưới
+        int hi = 0;
+
+        float per_edge = 0.0f;//lưu ý là nối từ nó lên cha
+        float per_len_edge = 0.0f;
+        float per_progress = 0.0f; //để tô màu cạnh
 
         
         //0: chữ đen + nền trắng + viền đen
@@ -81,9 +85,9 @@ private:
         //2: chữ trắng + nền cam + viền cam
         //3: chữ trắng + nền xanh + viên xanh
 
-        sf::Color co_shape = sf::Color::White;
-        sf::Color co_outline = sf::Color::Black;
-        sf::Color co_val = sf::Color::Black;
+        sf::Color co_shape = sf::Color(255, 255, 255, 0);
+        sf::Color co_outline = sf::Color(0, 0, 0, 0);
+        sf::Color co_val = sf::Color(0, 0, 0, 0);
 
         node (int x = 0, int y = 0, int _val = 0): cur_pos_x(x), cur_pos_y(y), nx_pos_x(x), nx_pos_y(y), pre_pos_x(x), pre_pos_y(y) , val(_val) {}
     };
@@ -99,9 +103,31 @@ private:
 
 private:
     int time_dfs;
-    void dfs_time(node *tmp);
+    void dfs_time(node *tmp, int hi, node *block);
     void insert_avl(int val);
-    void dfs_insert(node *tmp, node *par, int val);
+    node* dfs_insert(node *tmp, node *par, int val);
+    void set_new_postition(node *tmp);
+    void set_last_postition(node *tmp);
+    void shift_tree(node *need, float des, float des_len, float time);
+    void dfs_shift_tree(node *tmp, float per);
+    int get_high(node *tmp);
+    int get_balance(node *tmp);
+    void shift_tree_insert(float time);
+    node *Right_rotation(node *tmp);
+    node *Left_rotation(node *tmp);
+
+
+//search
+private:
+    void search_avl(int val);
+    void reset_color(node *tmp);
+    void dfs_find(node *tmp, int val);
+
+//delete 
+private:
+    void delete_avl(int val);
+    node *dfs_delete(node *tmp, int val);
+    void dfs_minn(node *tmp, node *boss);
 
 //text
 private:

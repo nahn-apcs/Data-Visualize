@@ -85,7 +85,7 @@ private:
 private:
     std::vector<std::vector<node>>tree_state;
     std::vector<std::vector<node>>postition_state;
-    int cur_stage = 0;
+    int cur_state = 0;
 
 
 //timebar

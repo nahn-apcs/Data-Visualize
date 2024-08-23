@@ -84,7 +84,7 @@ void HeapScreen::run() {
 
 
     reset_heap();
-    cur_stage = 0;
+    cur_state = 0;
 
     while(mWindow.isOpen()) {
         ProcessEvent();
@@ -338,7 +338,7 @@ void HeapScreen::Update() {
                 postition_state.clear();
                 tree_state.push_back(ds_node);
                 postition_state.push_back(ds_node);
-                cur_stage = 0;
+                cur_state = 0;
                 for(int i = 0; i < a.size(); i++) {
                     insert_heap(a[i]);
                 }
@@ -358,8 +358,10 @@ void HeapScreen::Update() {
     if(ds[21].clicked) {
         tree_state.clear();
         postition_state.clear();
-        cur_stage = 0;
+        cur_state = 0;
         ds_node.clear();
+        tree_state.push_back(ds_node);
+        postition_state.push_back(ds_node);
         int n = 0;
         for(int i = 0; i < ds[18].text.size(); i++) {
             n = n * 10 + ds[18].text[i] - '0';
@@ -380,7 +382,7 @@ void HeapScreen::Update() {
         postition_state.clear();
         tree_state.push_back(ds_node);
         postition_state.push_back(ds_node);
-        cur_stage = 0;
+        cur_state = 0;
         int val = 0;
         for(int i = 0; i < ds[23].text.size(); i++) {
             val = val * 10 + ds[23].text[i] - '0';
@@ -398,7 +400,7 @@ void HeapScreen::Update() {
         postition_state.clear();
         tree_state.push_back(ds_node);
         postition_state.push_back(ds_node);
-        cur_stage = 0;
+        cur_state = 0;
         extract_max();
         ds[4].clicked = 0;
         is_play = 1;
@@ -412,7 +414,7 @@ void HeapScreen::Update() {
         postition_state.clear();
         tree_state.push_back(ds_node);
         postition_state.push_back(ds_node);
-        cur_stage = 0;
+        cur_state = 0;
 
         int vt = 0;
 
@@ -440,7 +442,7 @@ void HeapScreen::Update() {
         postition_state.clear();
         tree_state.push_back(ds_node);
         postition_state.push_back(ds_node);
-        cur_stage = 0;
+        cur_state = 0;
 
         int vt = 0;
 
@@ -458,7 +460,7 @@ void HeapScreen::Update() {
 
     //full_back
     if(ds[10].clicked) {
-        cur_stage = 0;
+        cur_state = 0;
         ds[10].clicked = 0;
         is_play = 0;
         ds[13].disable = 0;
@@ -470,8 +472,8 @@ void HeapScreen::Update() {
     //back_step
 
     if(ds[11].clicked) {
-        cur_stage -= 30;
-        if(cur_stage < 0) cur_stage = 0;
+        cur_state -= 30;
+        if(cur_state < 0) cur_state = 0;
         ds[11].clicked = 0;
         is_play = 0;
         ds[13].disable = 0;
@@ -481,7 +483,7 @@ void HeapScreen::Update() {
 
     //return
     if(ds[12].clicked) {
-        cur_stage = 0;
+        cur_state = 0;
         ds[12].clicked = 0;
         ds[12].disable = 1;
         ds[14].disable = 0;
@@ -511,8 +513,8 @@ void HeapScreen::Update() {
     //go_step
     if(ds[15].clicked) {
         ds[15].clicked = 0;
-        cur_stage += 30;
-        if(cur_stage >= tree_state.size()) cur_stage = tree_state.size() - 1;
+        cur_state += 30;
+        if(cur_state >= tree_state.size()) cur_state = tree_state.size() - 1;
         is_play = 0;
         ds[13].disable = 0;
         ds[14].disable = 1;
@@ -522,7 +524,7 @@ void HeapScreen::Update() {
     //full_go
     if(ds[16].clicked) {
         ds[16].clicked = 0;
-        cur_stage = tree_state.size() - 1;
+        cur_state = tree_state.size() - 1;
         is_play = 0;
         ds[13].disable = 0;
         ds[14].disable = 1;
@@ -604,18 +606,18 @@ void HeapScreen::render_image() {
 void HeapScreen::Render() {
     mWindow.clear();
     render_image();
-    cur_stage = std::min(cur_stage, (int)tree_state.size() - 1);
-    if(cur_stage >= 0 && cur_stage < tree_state.size()) {
-        draw_heap(tree_state[cur_stage], postition_state[cur_stage]);
+    cur_state = std::min(cur_state, (int)tree_state.size() - 1);
+    if(cur_state >= 0 && cur_state < tree_state.size()) {
+        draw_heap(tree_state[cur_state], postition_state[cur_state]);
         draw_time_bar();
     }
 
 
 
     mWindow.display();
-    cur_stage = cur_stage + is_play * (int)speed;
-    cur_stage = std::min(cur_stage, (int)tree_state.size() - 1);
-    if(cur_stage == tree_state.size() - 1) {
+    cur_state = cur_state + is_play * (int)speed;
+    cur_state = std::min(cur_state, (int)tree_state.size() - 1);
+    if(cur_state == tree_state.size() - 1) {
         is_play = 0;
         ds[13].disable = ds[14].disable = 1;
         ds[12].disable = 0;
@@ -862,7 +864,7 @@ void HeapScreen::set_ds_node() {
             hi++;
         }
 
-        ds_node[i].pos_y = 120 + (hi - 1) * 60; //len = 50, base = 30
+        ds_node[i].pos_y = 120 + (hi - 1) * 60;
 
         ds_node[i].per_node = 255;
         if(2 * (i + 1) <= ds_node.size()) {
@@ -1019,7 +1021,7 @@ void HeapScreen::draw_time_bar() {
 
 
     //rgb(116,255,188)
-    float per = 1.0 * (cur_stage + 1) / (int)tree_state.size();
+    float per = 1.0 * (cur_state + 1) / (int)tree_state.size();
 
     sf::RectangleShape Line;
 
