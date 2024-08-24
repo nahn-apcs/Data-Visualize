@@ -121,7 +121,7 @@ private:
 private:
     void search_avl(int val);
     void reset_color(node *tmp);
-    void dfs_find(node *tmp, int val);
+    void dfs_find(node *tmp, node *par, int val);
 
 //delete 
 private:

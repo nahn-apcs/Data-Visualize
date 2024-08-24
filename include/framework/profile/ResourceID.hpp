@@ -58,6 +58,7 @@ enum class TextureID
     search_button = 48,
     search_button_in = 49,
     m_input = 50,
+    s_input = 51,
     //App Screen
 };
 

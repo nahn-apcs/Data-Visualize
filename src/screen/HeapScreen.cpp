@@ -173,6 +173,20 @@ void HeapScreen::ProcessEvent() {
                     ds[14].clicked = 1;
                 }
             }
+            else if(event.key.code == sf::Keyboard::Enter) {
+                if(ds[21].disable == 0) {
+                    ds[21].clicked = 1;
+                }
+                else if(ds[22].disable == 0) {
+                    ds[22].clicked = 1;
+                }
+                else if(ds[26].disable == 0) {
+                    ds[26].clicked = 1;
+                }
+                else if(ds[28].disable == 0) {
+                    ds[28].clicked = 1;
+                }
+            }
         }
     }
 }

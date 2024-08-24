@@ -64,7 +64,7 @@ void MenuScreen::ProcessEvent()
 
                     }
                     else if (i == 5 && sprite.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
-                        TrieScreen triescreen(mWindow, MyTexture);
+                        TrieScreen triescreen(mWindow, MyTexture, MyFont);
                         triescreen.run();
                     }
                     else if (i == 6 && sprite.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
@@ -164,6 +164,7 @@ void MenuScreen::AddTexture() {
     MyTexture.load(TextureID::search_button, "res/app_button/search_button.png");
     MyTexture.load(TextureID::search_button_in, "res/app_button/search_button_in.png");
     MyTexture.load(TextureID::m_input, "res/app_button/m_input.png");
+    MyTexture.load(TextureID::s_input, "res/app_button/s_input.png");
 }
 
 void MenuScreen::AddFont() {

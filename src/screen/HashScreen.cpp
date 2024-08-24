@@ -250,6 +250,20 @@ void HashScreen::ProcessEvent() {
                     ds[13].clicked = 1;
                 }
             }
+            else if(event.key.code == sf::Keyboard::Enter) {
+                if(ds[21].disable == 0) {
+                    ds[21].clicked = 1;
+                }
+                else if(ds[24].disable == 0) {
+                    ds[24].clicked = 1;
+                }
+                else if(ds[26].disable == 0) {
+                    ds[26].clicked = 1;
+                }
+                else if(ds[28].disable == 0) {
+                    ds[28].clicked = 1;
+                }
+            }
         }
     }
 }
@@ -633,7 +647,7 @@ void HashScreen::modify_input(std::string &s, int t) {
         for(int i = 0; i < s.size(); i++) {
             tmp = tmp * 10 + s[i] - '0';
         }
-        if(tmp > 30) tmp = ds_node.size();
+        if(tmp > 30) tmp = 30;
         s = std::to_string(tmp);
     }
     else {
@@ -872,23 +886,23 @@ void HashScreen::change_color(node *tmp, float time, int t) {
 
 
             //nen
-            tmp->co_shape.r = cur_nen.r + 1.0 * (34 - cur_nen.r) * i / (60 * time);
-            tmp->co_shape.g = cur_nen.g + 1.0 * (139 - cur_nen.g) * i / (60 * time);
-            tmp->co_shape.b = cur_nen.b + 1.0 * (34 - cur_nen.b) * i / (60 * time);
+            tmp->co_shape.r = cur_nen.r + 1.0 * (106 - cur_nen.r) * i / (60 * time);
+            tmp->co_shape.g = cur_nen.g + 1.0 * (220 - cur_nen.g) * i / (60 * time);
+            tmp->co_shape.b = cur_nen.b + 1.0 * (127 - cur_nen.b) * i / (60 * time);
 
 
             //vien
-            tmp->co_outline.r = cur_vien.r + 1.0 * (34 - cur_vien.r) * i / (60 * time);
-            tmp->co_outline.g = cur_vien.g + 1.0 * (139 - cur_vien.g) * i / (60 * time);
-            tmp->co_outline.b = cur_vien.b + 1.0 * (34 - cur_vien.b) * i / (60 * time);
+            tmp->co_outline.r = cur_vien.r + 1.0 * (106 - cur_vien.r) * i / (60 * time);
+            tmp->co_outline.g = cur_vien.g + 1.0 * (220 - cur_vien.g) * i / (60 * time);
+            tmp->co_outline.b = cur_vien.b + 1.0 * (127 - cur_vien.b) * i / (60 * time);
 
             std::vector<node>new_ds; 
             copy_ds_node(new_ds);
             hash_state.push_back(new_ds);
         }
         tmp->co_val = sf::Color(255, 255, 255);
-        tmp->co_shape = sf::Color(34, 139, 34);
-        tmp->co_outline = sf::Color(34, 139, 34);
+        tmp->co_shape = sf::Color(106, 220, 127);
+        tmp->co_outline = sf::Color(106, 220, 127);
         std::vector<node>new_ds; 
         copy_ds_node(new_ds);
         hash_state.push_back(new_ds);

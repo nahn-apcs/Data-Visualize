@@ -320,27 +320,26 @@ void AVLScreen::reset_color(node *tmp) {
     reset_color(tmp->Right);
 }
 
-void AVLScreen::dfs_find(node *tmp, int val) {
-    if(tmp == NULL) return;
-    if(tmp->par != NULL) {
-        change_color_and_edge(tmp->par, 0.2f, 1, 1);
+void AVLScreen::dfs_find(node *tmp, node *par, int val) {
+    if(par != NULL) {
+        change_color_and_edge(par, 0.2f, 1, 1);
     }
+    if(tmp == NULL) return;
     change_color_and_edge(tmp, 0.2f, 2, 1);
     if(tmp->val == val) {
         change_color_and_edge(tmp, 0.2f, 3, 1);
         return;
     }
     else if(val < tmp->val) {
-        dfs_find(tmp->Left, val);
+        dfs_find(tmp->Left, tmp, val);
     }
-    else dfs_find(tmp->Right, val);
+    else dfs_find(tmp->Right, tmp, val);
 }
 
 void AVLScreen::search_avl(int val) {
-    reset_color(root);
     avl_state.push_back(copy_root(root));
 
-    dfs_find(root, val);
+    dfs_find(root, NULL, val);
 }
 
 void AVLScreen::dfs_minn(node *tmp, node *boss) {
@@ -466,7 +465,6 @@ AVLScreen::node *AVLScreen::dfs_delete(node *tmp, int val) {
 }
 
 void AVLScreen::delete_avl(int val) {
-    reset_color(root);
     root = dfs_delete(root, val);
 }
 
@@ -620,6 +618,20 @@ void AVLScreen::ProcessEvent() {
                 }
                 else if(ds[13].disable == 0) {
                     ds[13].clicked = 1;
+                }
+            }
+            else if(event.key.code == sf::Keyboard::Enter) {
+                if(ds[19].disable == 0) {
+                    ds[19].clicked = 1;
+                }
+                else if(ds[22].disable == 0) {
+                    ds[22].clicked = 1;
+                }
+                else if(ds[24].disable == 0) {
+                    ds[24].clicked = 1;
+                }
+                else if(ds[26].disable == 0) {
+                    ds[26].clicked = 1;
                 }
             }
         }
@@ -826,6 +838,7 @@ void AVLScreen::Update() {
 
     //go insert
     if(ds[22].clicked && ds[22].disable == 0) {
+        reset_color(root);
         clear_state();
         avl_state.push_back(copy_root(root));
         cur_state = 0;
@@ -844,6 +857,7 @@ void AVLScreen::Update() {
 
     //go search 
     if(ds[24].clicked && ds[24].disable == 0) {
+        reset_color(root);
         clear_state();
         avl_state.push_back(copy_root(root));
         cur_state = 0;
@@ -862,6 +876,7 @@ void AVLScreen::Update() {
 
     //go delete
     if(ds[26].clicked && ds[26].disable == 0) {
+        reset_color(root);
         clear_state();
         avl_state.push_back(copy_root(root));
         cur_state = 0;
@@ -1160,23 +1175,23 @@ void AVLScreen::change_color_and_edge(node *tmp, float time, int t, float des) {
 
 
             //nen
-            tmp->co_shape.r = cur_nen.r + 1.0 * (34 - cur_nen.r) * i / (60 * time);
-            tmp->co_shape.g = cur_nen.g + 1.0 * (139 - cur_nen.g) * i / (60 * time);
-            tmp->co_shape.b = cur_nen.b + 1.0 * (34 - cur_nen.b) * i / (60 * time);
+            tmp->co_shape.r = cur_nen.r + 1.0 * (106 - cur_nen.r) * i / (60 * time);
+            tmp->co_shape.g = cur_nen.g + 1.0 * (220 - cur_nen.g) * i / (60 * time);
+            tmp->co_shape.b = cur_nen.b + 1.0 * (127 - cur_nen.b) * i / (60 * time);
 
 
             //vien
-            tmp->co_outline.r = cur_vien.r + 1.0 * (34 - cur_vien.r) * i / (60 * time);
-            tmp->co_outline.g = cur_vien.g + 1.0 * (139 - cur_vien.g) * i / (60 * time);
-            tmp->co_outline.b = cur_vien.b + 1.0 * (34 - cur_vien.b) * i / (60 * time);
+            tmp->co_outline.r = cur_vien.r + 1.0 * (106 - cur_vien.r) * i / (60 * time);
+            tmp->co_outline.g = cur_vien.g + 1.0 * (220 - cur_vien.g) * i / (60 * time);
+            tmp->co_outline.b = cur_vien.b + 1.0 * (127 - cur_vien.b) * i / (60 * time);
 
             node *new_ds = copy_root(root);
             avl_state.push_back(new_ds);
         }
         tmp->per_progress = des;
         tmp->co_val = sf::Color(255, 255, 255);
-        tmp->co_shape = sf::Color(34, 139, 34);
-        tmp->co_outline = sf::Color(34, 139, 34);
+        tmp->co_shape = sf::Color(106, 220, 127);
+        tmp->co_outline = sf::Color(106, 220, 127);
         node *new_ds = copy_root(root);
         avl_state.push_back(new_ds);
     }
