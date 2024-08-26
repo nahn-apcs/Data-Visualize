@@ -188,10 +188,10 @@ AVLScreen::node* AVLScreen::Right_rotation(node *tmp) {
     time_dfs = 0;
     dfs_time(root, 1, NULL);
     set_new_postition(root);
-    shift_tree_insert(0.5f);
+    shift_tree_insert(0.3f);
     set_last_postition(root);
 
-    change_color_and_edge(x, 0.2f, 0, 0);
+    change_color_and_edge(x, 0.3f, 0, 0);
     return x;
 }
 AVLScreen::node* AVLScreen::Left_rotation(node *tmp) {
@@ -226,15 +226,15 @@ AVLScreen::node* AVLScreen::Left_rotation(node *tmp) {
     time_dfs = 0;
     dfs_time(root, 1, NULL);
     set_new_postition(root);
-    shift_tree_insert(0.5f);
+    shift_tree_insert(0.3f);
     set_last_postition(root);
 
-    change_color_and_edge(x, 0.2f, 0, 0);
+    change_color_and_edge(x, 0.3f, 0, 0);
     return x;
 }
 
 AVLScreen::node* AVLScreen::dfs_insert(node *tmp, node *par, int val) {
-    if(par != NULL) change_color_and_edge(par, 0.2f, 1, 1);
+    if(par != NULL) change_color_and_edge(par, 0.3f, 1, 1);
     if(tmp == NULL) {
         node *new_node = new node;
         new_node->val = val;
@@ -262,7 +262,7 @@ AVLScreen::node* AVLScreen::dfs_insert(node *tmp, node *par, int val) {
 
 
 
-        shift_tree(new_node, 255, 1.0f, 0.5f);
+        shift_tree(new_node, 255, 1.0f, 0.3f);
 
 
         set_last_postition(root);
@@ -270,11 +270,11 @@ AVLScreen::node* AVLScreen::dfs_insert(node *tmp, node *par, int val) {
         return new_node;
     }
     else {
-        change_color_and_edge(tmp, 0.2f, 2, 1);
+        change_color_and_edge(tmp, 0.3f, 2, 1);
         if(tmp->val == val);
         else if(tmp->val > val) tmp->Left = dfs_insert(tmp->Left, tmp, val);
         else tmp->Right = dfs_insert(tmp->Right, tmp, val);
-        change_color_and_edge(tmp, 0.2f, 2, 1);
+        change_color_and_edge(tmp, 0.3f, 2, 1);
 
         //xoay cay
         int balance = get_balance(tmp);
@@ -300,7 +300,7 @@ AVLScreen::node* AVLScreen::dfs_insert(node *tmp, node *par, int val) {
         
 
 
-        change_color_and_edge(tmp, 0.2f, 0, 0);
+        change_color_and_edge(tmp, 0.3f, 0, 0);
         return tmp;
     }
 }
@@ -322,12 +322,12 @@ void AVLScreen::reset_color(node *tmp) {
 
 void AVLScreen::dfs_find(node *tmp, node *par, int val) {
     if(par != NULL) {
-        change_color_and_edge(par, 0.2f, 1, 1);
+        change_color_and_edge(par, 0.3f, 1, 1);
     }
     if(tmp == NULL) return;
-    change_color_and_edge(tmp, 0.2f, 2, 1);
+    change_color_and_edge(tmp, 0.3f, 2, 1);
     if(tmp->val == val) {
-        change_color_and_edge(tmp, 0.2f, 3, 1);
+        change_color_and_edge(tmp, 0.3f, 3, 1);
         return;
     }
     else if(val < tmp->val) {
@@ -343,36 +343,36 @@ void AVLScreen::search_avl(int val) {
 }
 
 void AVLScreen::dfs_minn(node *tmp, node *boss) {
-    change_color_and_edge(tmp->par, 0.2f, 1, 1);
-    change_color_and_edge(tmp, 0.2f, 2, 1);
+    change_color_and_edge(tmp->par, 0.3f, 1, 1);
+    change_color_and_edge(tmp, 0.3f, 2, 1);
     if(tmp->Left == NULL) {
         boss->val = tmp->val;
     }
     else dfs_minn(tmp->Left, boss);
-    change_color_and_edge(tmp, 0.2f, 2, 1);
-    change_color_and_edge(tmp, 0.2f, 0, 0);
+    change_color_and_edge(tmp, 0.3f, 2, 1);
+    change_color_and_edge(tmp, 0.3f, 0, 0);
     return;
 }
 
 AVLScreen::node *AVLScreen::dfs_delete(node *tmp, int val) {
     if(tmp == NULL) return NULL;
-    if(tmp->par != NULL) change_color_and_edge(tmp->par, 0.2f, 1, 1);
-    change_color_and_edge(tmp, 0.2f, 2, 1);
+    if(tmp->par != NULL) change_color_and_edge(tmp->par, 0.3f, 1, 1);
+    change_color_and_edge(tmp, 0.3f, 2, 1);
 
     if(val < tmp->val) {
         tmp->Left = dfs_delete(tmp->Left, val);
-        change_color_and_edge(tmp, 0.2f, 2, 1);
+        change_color_and_edge(tmp, 0.3f, 2, 1);
     }
     else if(val > tmp->val) {
         tmp->Right = dfs_delete(tmp->Right, val);
-        change_color_and_edge(tmp, 0.2f, 2, 1);
+        change_color_and_edge(tmp, 0.3f, 2, 1);
     }
     else {
         if(tmp->Left == NULL && tmp->Right == NULL) {
             time_dfs = 0;
             dfs_time(root, 1, tmp);
             set_new_postition(root);
-            shift_tree(tmp, 0, 0, 0.5f);
+            shift_tree(tmp, 0, 0, 0.3f);
             if(tmp->par != NULL) {
                 if(tmp->val < tmp->par->val) {
                     tmp->par->Left = NULL;
@@ -389,7 +389,7 @@ AVLScreen::node *AVLScreen::dfs_delete(node *tmp, int val) {
             time_dfs = 0;
             dfs_time(root, 1, tmp);
             set_new_postition(root);
-            shift_tree(tmp, 0, 0, 0.5f);
+            shift_tree(tmp, 0, 0, 0.3f);
             cur->par = tmp->par;
             if(tmp->par != NULL) {
                 if(tmp->val < tmp->par->val) {
@@ -408,7 +408,7 @@ AVLScreen::node *AVLScreen::dfs_delete(node *tmp, int val) {
             time_dfs = 0;
             dfs_time(root, 1, tmp);
             set_new_postition(root);
-            shift_tree(tmp, 0, 0, 0.5f);
+            shift_tree(tmp, 0, 0, 0.3f);
             cur->par = tmp->par;
             if(tmp->par != NULL) {
                 if(tmp->val < tmp->par->val) {
@@ -426,7 +426,7 @@ AVLScreen::node *AVLScreen::dfs_delete(node *tmp, int val) {
         }
         else {
             dfs_minn(tmp->Right, tmp);
-            change_color_and_edge(tmp, 0.2f, 2, 1);
+            change_color_and_edge(tmp, 0.3f, 2, 1);
             node *cur = dfs_delete(tmp->Right, tmp->val);
             if(cur != NULL) cur->par = tmp;
             tmp->Right = cur;
@@ -460,7 +460,7 @@ AVLScreen::node *AVLScreen::dfs_delete(node *tmp, int val) {
 
 
 
-    change_color_and_edge(tmp, 0.2f, 0, 0);
+    change_color_and_edge(tmp, 0.3f, 0, 0);
     return tmp;
 }
 
@@ -1284,8 +1284,9 @@ void AVLScreen::draw_avl(node *tmp) {
 
     // Vẽ node hiện tại
     sf::CircleShape circle(15, 100);
+    circle.setOrigin(circle.getRadius(), circle.getRadius());
     circle.setOutlineThickness(3);
-    circle.setPosition(tmp -> cur_pos_x - 15, tmp -> cur_pos_y - 15);
+    circle.setPosition(tmp -> cur_pos_x, tmp -> cur_pos_y);
     circle.setOutlineColor(tmp -> co_outline);
     circle.setFillColor(tmp -> co_shape);
 

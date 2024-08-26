@@ -924,10 +924,10 @@ void HashScreen::insert_hash(int val) {
     int block = val % mod;
 
     //tô màu của block đó thành màu cam
-    change_color(&ds_node[block], 0.2f, 1);
+    change_color(&ds_node[block], 0.3f, 1);
 
 
-    animation_shift_node_down(block, 0.5f);
+    animation_shift_node_down(block, 0.3f);
 
     node *cur = new node;
     cur -> child = ds_node[block].child;
@@ -939,19 +939,19 @@ void HashScreen::insert_hash(int val) {
     copy_ds_node(tmp);
     hash_state.push_back(tmp);
 
-    change_color(ds_node[block].child, 0.2f, 2);
+    change_color(ds_node[block].child, 0.3f, 2);
 
     return;
 }
 
 void HashScreen::dfs_find(node *tmp, node *par, int need) {
     if(par != NULL) {
-        change_color(par, 0.2f, 1);
+        change_color(par, 0.3f, 1);
     }
     if(tmp == NULL) return;
-    change_color(tmp, 0.2f, 2);
+    change_color(tmp, 0.3f, 2);
     if(par != NULL && tmp -> val == need) {
-        change_color(tmp, 0.2f, 3);
+        change_color(tmp, 0.3f, 3);
     }
     else {
         dfs_find(tmp->child, tmp, need);
@@ -994,12 +994,12 @@ void HashScreen::animation_shift_node_up(node *tmp, float time) {
 
 void HashScreen::dfs_delete(node *tmp, node *par, int need) {
     if(par != NULL) {
-        change_color(par, 0.2f, 1);
+        change_color(par, 0.3f, 1);
     }
     if(tmp == NULL) return;
-    change_color(tmp, 0.2f, 2);
+    change_color(tmp, 0.3f, 2);
     if(par != NULL && tmp->val == need) {
-        animation_shift_node_up(tmp, 0.5f);
+        animation_shift_node_up(tmp, 0.3f);
         par->child = tmp->child;
         delete tmp;
         tmp = NULL;
@@ -1104,8 +1104,9 @@ void HashScreen::draw_node(node *tmp) {
 
     // Vẽ node hiện tại
     sf::CircleShape circle(15, 100);
+    circle.setOrigin(circle.getRadius(), circle.getRadius());
     circle.setOutlineThickness(3);
-    circle.setPosition(tmp -> pos_x - 15, tmp -> pos_y - 15);
+    circle.setPosition(tmp -> pos_x, tmp -> pos_y);
     circle.setOutlineColor(tmp -> co_outline);
     circle.setFillColor(tmp -> co_shape);
 
@@ -1143,7 +1144,8 @@ void HashScreen::draw_hash(std::vector<node>& hash_state) {
         // Vẽ node hiện tại
         sf::RectangleShape square(sf::Vector2f(30.0f, 30.0f));
         square.setOutlineThickness(3);
-        square.setPosition(hash_state[i].pos_x - 15, hash_state[i].pos_y - 15);
+        square.setOrigin(15, 15);
+        square.setPosition(hash_state[i].pos_x, hash_state[i].pos_y);
         square.setOutlineColor(hash_state[i].co_outline);
         square.setFillColor(hash_state[i].co_shape);
 

@@ -210,7 +210,7 @@ void TrieScreen::dfs_insert(node *tmp, node *par, const std::string &s, int cur)
 
         new_node->cur_pos_x = new_node->pre_pos_x = new_node->nx_pos_x;
         new_node->cur_pos_y = new_node->pre_pos_y = new_node->nx_pos_y;
-        shift_tree_insert(new_node, 255, 1, 0.2f);
+        shift_tree_insert(new_node, 255, 1, 0.3f);
 
         set_last_postition(root, NULL);
     }
@@ -239,38 +239,38 @@ void TrieScreen::insert_trie(const std::string& s) {
 
 bool TrieScreen::dfs_search(node *tmp, node *par, const std::string& s, int cur) {
     if(par != NULL) {
-        change_color_and_edge(par, 0.2f, 1, 1);
+        change_color_and_edge(par, 0.3f, 1, 1);
     }
     if(tmp == NULL) return 0;
 
-    change_color_and_edge(tmp, 0.2f, 2, 1);
+    change_color_and_edge(tmp, 0.3f, 2, 1);
 
     if(cur == (int)s.size()) {
         if(tmp->en > 0) {
-            change_color_and_edge(tmp, 0.2f, 3, 1);
+            change_color_and_edge(tmp, 0.3f, 3, 1);
             return 1;
         }
         else {
-            change_color_and_edge(tmp, 0.2f, 0, 0);
+            change_color_and_edge(tmp, 0.3f, 0, 0);
             return 0;
         }
     }
     else {
         int kt = s[cur] - 'a';
         if(tmp->c[kt] == NULL) {
-            change_color_and_edge(tmp, 0.2f, 0, 0);
+            change_color_and_edge(tmp, 0.3f, 0, 0);
             return 0;
         }
         else {
             int ok = dfs_search(tmp->c[kt], tmp, s, cur + 1);
-            change_color_and_edge(tmp, 0.2f, 2, 1);
+            change_color_and_edge(tmp, 0.3f, 2, 1);
 
             if(ok == 0) {
-                change_color_and_edge(tmp, 0.2f, 0, 0);
+                change_color_and_edge(tmp, 0.3f, 0, 0);
                 return 0;
             }
             else {
-                change_color_and_edge(tmp, 0.2f, 1, 1);
+                change_color_and_edge(tmp, 0.3f, 1, 1);
                 return 1;
             }
         }
@@ -284,11 +284,11 @@ void TrieScreen::search_trie(const std::string& s) {
 
 bool TrieScreen::dfs_delete(node *tmp, node *par, const std::string &s, int cur) {
     if(par != NULL) {
-        change_color_and_edge(par, 0.2f, 1, 1);
+        change_color_and_edge(par, 0.3f, 1, 1);
     }
     if(tmp == NULL) return 0;
 
-    change_color_and_edge(tmp, 0.2f, 2, 1);
+    change_color_and_edge(tmp, 0.3f, 2, 1);
 
     if(cur == (int)s.size()) {
         if(tmp->en > 0) {
@@ -301,7 +301,7 @@ bool TrieScreen::dfs_delete(node *tmp, node *par, const std::string &s, int cur)
                 dfs_time(root, 1, tmp);
                 set_new_postition(root, tmp);
 
-                shift_tree_insert(tmp, 0, 0, 0.2f);
+                shift_tree_insert(tmp, 0, 0, 0.3f);
 
                 set_last_postition(root, tmp);
 
@@ -315,26 +315,26 @@ bool TrieScreen::dfs_delete(node *tmp, node *par, const std::string &s, int cur)
                 tmp = NULL;
             }
             else {
-                change_color_and_edge(tmp, 0.2f, 0, 0);
+                change_color_and_edge(tmp, 0.3f, 0, 0);
             }
             return 1;
         }
         else {
-            change_color_and_edge(tmp, 0.2f, 0, 0);
+            change_color_and_edge(tmp, 0.3f, 0, 0);
             return 0;
         }
     }
     else {
         int kt = s[cur] - 'a';
         if(tmp->c[kt] == NULL) {
-            change_color_and_edge(tmp, 0.2f, 0, 0);
+            change_color_and_edge(tmp, 0.3f, 0, 0);
             return 0;
         }
         else {
             int ok = dfs_delete(tmp->c[kt], tmp, s, cur + 1);
-            change_color_and_edge(tmp, 0.2f, 2, 1);
+            change_color_and_edge(tmp, 0.3f, 2, 1);
             if(ok == 0) {
-                change_color_and_edge(tmp, 0.2f, 0, 0);
+                change_color_and_edge(tmp, 0.3f, 0, 0);
                 return 0;
             }
             else {
@@ -344,7 +344,7 @@ bool TrieScreen::dfs_delete(node *tmp, node *par, const std::string &s, int cur)
                     dfs_time(root, 1, tmp);
                     set_new_postition(root, tmp);
 
-                    shift_tree_insert(tmp, 0, 0, 0.2f);
+                    shift_tree_insert(tmp, 0, 0, 0.3f);
 
                     set_last_postition(root, tmp);
 
@@ -358,7 +358,7 @@ bool TrieScreen::dfs_delete(node *tmp, node *par, const std::string &s, int cur)
                     tmp = NULL;
                 }
                 else {
-                    change_color_and_edge(tmp, 0.2f, 0, 0);
+                    change_color_and_edge(tmp, 0.3f, 0, 0);
                 }
                 return 1;
             }
@@ -1195,8 +1195,9 @@ void TrieScreen::draw_trie(node *tmp) {
 
     // Vẽ node hiện tại
     sf::CircleShape circle(15, 100);
+    circle.setOrigin(circle.getRadius(), circle.getRadius());
     circle.setOutlineThickness(3);
-    circle.setPosition(tmp -> cur_pos_x - 15, tmp -> cur_pos_y - 15);
+    circle.setPosition(tmp -> cur_pos_x, tmp -> cur_pos_y);
     circle.setOutlineColor(tmp -> co_outline);
     circle.setFillColor(tmp -> co_shape);
 

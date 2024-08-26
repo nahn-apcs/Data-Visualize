@@ -670,7 +670,7 @@ void HeapScreen::insert_heap(int val) {
         dfs_inoder(1, 0);
 
 
-        animation_shift_tree_new_node(0.5f);
+        animation_shift_tree_new_node(0.3f);
 
         up_heapify(ds_node.size());
     }
@@ -766,7 +766,7 @@ void HeapScreen::up_heapify(int u) {
     if(ds_node[cha - 1].val < ds_node[u - 1].val) {
 
 
-        animation_swap_node(cha, u, 0.5f);
+        animation_swap_node(cha, u, 0.3f);
         up_heapify(u / 2);
     }
     return;
@@ -976,6 +976,7 @@ void HeapScreen::draw_node(int u, std::vector<node>& tree_state, std::vector<nod
 
     // Vẽ node hiện tại
     sf::CircleShape circle(15, 100);
+    circle.setOrigin(circle.getRadius(), circle.getRadius());
     if(tree_state[u - 1].now == 0) {
         circle.setFillColor(sf::Color(255, 255, 255, tree_state[u - 1].per_node));
         circle.setOutlineColor(sf::Color(0, 0, 0, tree_state[u - 1].per_node));
@@ -985,7 +986,7 @@ void HeapScreen::draw_node(int u, std::vector<node>& tree_state, std::vector<nod
         circle.setOutlineColor(sf::Color(255, 165, 0, tree_state[u - 1].per_node));
     }
     circle.setOutlineThickness(3);
-    circle.setPosition(tree_state[u - 1].pos_x - 15, tree_state[u - 1].pos_y - 15);
+    circle.setPosition(tree_state[u - 1].pos_x, tree_state[u - 1].pos_y);
 
 
 
@@ -1051,7 +1052,7 @@ void HeapScreen::draw_time_bar() {
 
 void HeapScreen::extract_max() {
     if(ds_node.size()) {
-        if(ds_node.size() > 1) animation_swap_node(1, ds_node.size(), 0.5f);
+        if(ds_node.size() > 1) animation_swap_node(1, ds_node.size(), 0.3f);
         delete_node((int)ds_node.size());
     }
 }
@@ -1059,7 +1060,7 @@ void HeapScreen::extract_max() {
 void HeapScreen::delete_node(int u) {
     time_vi = 0;
     dfs_inoder(1, u);
-    animation_shift_tree_delete_node(0.5f);
+    animation_shift_tree_delete_node(0.3f);
     down_heapify(1);
 }
 
@@ -1179,20 +1180,20 @@ void HeapScreen::down_heapify(int u) {
     if(R <= ds_node.size()) {
         if(ds_node[L - 1].val > ds_node[R - 1].val) {
             if(ds_node[L - 1].val > ds_node[u - 1].val) {
-                animation_swap_node(L, u, 0.5f);
+                animation_swap_node(L, u, 0.3f);
                 down_heapify(L);
             }
         }
         else {
             if(ds_node[R - 1].val > ds_node[u - 1].val) {
-                animation_swap_node(R, u, 0.5f);
+                animation_swap_node(R, u, 0.3f);
                 down_heapify(R);
             }
         }
     }
     else if(L <= ds_node.size()) {
         if(ds_node[L - 1].val > ds_node[u - 1].val) {
-            animation_swap_node(L, u, 0.5f);
+            animation_swap_node(L, u, 0.3f);
             down_heapify(L);
         }
     }

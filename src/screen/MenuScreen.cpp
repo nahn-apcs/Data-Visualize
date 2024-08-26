@@ -68,7 +68,7 @@ void MenuScreen::ProcessEvent()
                         triescreen.run();
                     }
                     else if (i == 6 && sprite.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
-                        GraphScreen graphscreen(mWindow, MyTexture);
+                        GraphScreen graphscreen(mWindow, MyTexture, MyFont);
                         graphscreen.run();
                     }
                 }
