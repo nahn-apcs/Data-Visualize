@@ -165,7 +165,18 @@ void MenuScreen::AddTexture() {
     MyTexture.load(TextureID::search_button_in, "res/app_button/search_button_in.png");
     MyTexture.load(TextureID::m_input, "res/app_button/m_input.png");
     MyTexture.load(TextureID::s_input, "res/app_button/s_input.png");
+    MyTexture.load(TextureID::fixed_off, "res/app_button/fixed_off.png");
+    MyTexture.load(TextureID::fixed_off_in, "res/app_button/fixed_off_in.png");
+    MyTexture.load(TextureID::fixed_on, "res/app_button/fixed_on.png");
+    MyTexture.load(TextureID::fixed_on_in, "res/app_button/fixed_on_in.png");
+    MyTexture.load(TextureID::matrix, "res/app_button/matrix.png");
+    MyTexture.load(TextureID::matrix_in, "res/app_button/matrix_in.png");
+    MyTexture.load(TextureID::cc, "res/app_button/cc.png");
+    MyTexture.load(TextureID::cc_in, "res/app_button/cc_in.png");
+    MyTexture.load(TextureID::mst, "res/app_button/mst.png");
+    MyTexture.load(TextureID::mst_in, "res/app_button/mst_in.png");
 }
+
 
 void MenuScreen::AddFont() {
     MyFont.load(FontID::arial_bold, "res/fonts/arial_bold.ttf");

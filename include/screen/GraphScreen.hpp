@@ -61,8 +61,6 @@ private:
 
         int val;
 
-        sf::Vector2f F;
-
 
         
         //0: chữ đen + nền trắng + viền đen
@@ -88,8 +86,10 @@ private:
         sf::Color co_edge = sf::Color::Black;
 
         edge(node *_u = NULL, node *_v = NULL, int _val = 0): u(_u), v(_v), val(_val) {}
+
     };
     std::vector<edge*> ds_edge;
+    static bool cmp(const edge *a, const edge *b);
 
 //Force-Directed Drawings
 private:
@@ -99,6 +99,19 @@ private:
 //create
 private:
     void create_random(int n, int m);
+
+//cc
+private:
+    void find_cc();
+    void dfs_cc(int u, sf::Color color, bool *vi, bool *vi_edge);
+    void change_color_node(node *tmp, sf::Color des, float time);
+    void change_color_edge(edge *tmp, sf::Color des, float time);
+
+//mst
+private:
+    void cal_mst();
+    int Find(int *par, int u);
+    bool join(int *par, int u, int v);
 
 //text
 private:
@@ -127,14 +140,16 @@ private:
     std::vector<std::vector<edge*>>edge_state;
     //lưu lại trạng thái màu của các đỉnh và các cạnh
     void clear_state();
-    void clear_node(std::vector<node*> tmp);
-    void clear_edge(std::vector<edge*> tmp);
+    void clear_node(std::vector<node*> &tmp);
+    void clear_edge(std::vector<edge*> &tmp);
     void clear_all();
-    void draw_edge(edge *tmp);
-    void draw_node(node *tmp);
-    void draw_graph(std::vector<node*>ds_node, std::vector<edge*>ds_edge);
-    void copy_node(std::vector<node*>tmp);
-    void copy_edge(std::vector<edge*>tmp);
+    void draw_edge(edge *tmp, edge *color);
+    void draw_node(node *tmp, node *color);
+    void draw_graph(std::vector<node*> &node_state, std::vector<edge*> &edge_state);
+    std::vector<node*> copy_node();
+    std::vector<edge*> copy_edge();
+    void reset_color();
+    std::vector<sf::Color> ds_color;
 };
 
 

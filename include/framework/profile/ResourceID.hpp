@@ -59,6 +59,16 @@ enum class TextureID
     search_button_in = 49,
     m_input = 50,
     s_input = 51,
+    fixed_on = 52,
+    fixed_off = 53,
+    fixed_on_in = 54,
+    fixed_off_in = 55,
+    cc = 56,
+    cc_in = 57,
+    matrix = 58,
+    matrix_in = 59,
+    mst = 60,
+    mst_in = 61,
     //App Screen
 };
 
