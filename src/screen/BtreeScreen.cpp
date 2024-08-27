@@ -282,6 +282,25 @@ void BtreeScreen::shift_tree_insert(edge *edge_1, edge* edge_2, small_node *node
     }
 }
 
+void BtreeScreen::shift_tree_delete(edge *edge_1, edge* edge_2, small_node *node_1, float time) {
+    for(int i = 1; i <= 60 * time; i++) {
+        if(edge_1 != NULL) {
+            edge_1->co_edge.a = 1.0 * i / (60 * time) * 255;
+        }
+        if(edge_2 != NULL) {
+            edge_2->co_edge.a = 1.0 * i / (60 * time) * 255;
+        }
+        if(node_1 != NULL) {
+            node_1->co_outline.a = 255 - 1.0 * i / (60 * time) * 255;
+            node_1->co_shape.a = 255 - 1.0 * i / (60 * time) * 255;
+            node_1->co_val.a = 255 - 1.0 * i / (60 * time) * 255;
+        }
+        dfs_shift_tree(root, 1.0 * i / (60 * time));
+
+        btree_state.push_back(copy_root(root));
+    }
+}
+
 void BtreeScreen::reset_color(big_node *tmp) {
     if(tmp == NULL) return;
     for(int i = 0; i < tmp->ds_small_node.size(); i++) {
@@ -763,6 +782,373 @@ void BtreeScreen::search_btree(int val) {
 
 }
 
+void BtreeScreen::only_root(int val) {
+    std::vector<std::pair<small_node*, int>> ds_node;
+    std::vector<std::pair<edge*, int>> ds_edge;
+
+    for(int i = 0; i < root->ds_small_node.size(); i++) {
+        ds_node.push_back(std::make_pair(root->ds_small_node[i], 2));
+    }
+    change_color(ds_node, ds_edge, 0.3f);
+    ds_node.clear();
+
+    int pos = 0;
+    while(pos < root->ds_small_node.size() && root->ds_small_node[pos]->val < val)pos++;
+
+    if(pos < root->ds_small_node.size() && root->ds_small_node[pos]->val == val) {
+        dfs_time(root->ds_small_node[pos]);
+            
+        set_new_postition(root, root->ds_small_node[pos], 1);
+
+        shift_tree_delete(NULL, NULL, root->ds_small_node[pos], 0.3f);
+
+        root->ds_small_node.erase(root->ds_small_node.begin() + pos);
+
+        set_last_postition(root, NULL, 1);
+    }
+
+    for(int i = 0; i < root->ds_small_node.size(); i++) {
+        ds_node.push_back(std::make_pair(root->ds_small_node[i], 0));
+    }
+    change_color(ds_node, ds_edge, 0.3f);
+    ds_node.clear();
+
+    if(root->ds_small_node.size() == 0) {
+        delete root;
+        root = NULL;
+    }
+    return;
+}
+
+int BtreeScreen::get_minn(big_node *tmp) {
+    if(tmp->ds_big_node.size() == 0) return tmp->ds_small_node[0]->val;
+    else return get_minn(tmp->ds_big_node[0]);
+}
+
+void BtreeScreen::dfs_delete(big_node *tmp, big_node *par, edge *canh, int val) {
+
+    if(tmp == NULL) return;
+
+    std::vector<std::pair<small_node*, int>> ds_node;
+    std::vector<std::pair<edge*, int>> ds_edge;
+
+    if(par != NULL) {
+        for(int i = 0; i < par->ds_small_node.size(); i++) {
+            ds_node.push_back(std::make_pair(par->ds_small_node[i], 1));
+        }
+
+        change_color(ds_node, ds_edge, 0.3f);
+        ds_node.clear();
+        ds_edge.clear();
+    }
+
+    for(int i = 0; i < tmp->ds_small_node.size(); i++) {
+        ds_node.push_back(std::make_pair(tmp->ds_small_node[i], 2));
+    }
+
+    if(canh != NULL) ds_edge.push_back(std::make_pair(canh, 1));
+
+    change_color(ds_node, ds_edge, 0.3f);
+    ds_node.clear();
+    ds_edge.clear();
+
+    //nếu nó ko đủ 2 giá trị
+    if(tmp->ds_small_node.size() == 1) {
+        //TH1: kiểm tra anh em của nó có ai có nhiều hơn 2 giá trị ko
+
+        int pos = 0;
+
+        for(int i = 0; i < par->ds_big_node.size(); i++) {
+            if(par->ds_big_node[i] == tmp) {
+                pos = i;
+                break;
+            }
+        }
+
+        if(pos > 0 && par->ds_big_node[pos - 1]->ds_small_node.size() >= 2) {
+            big_node *cur = par->ds_big_node[pos - 1];
+            small_node *node_from_par = par->ds_small_node[pos - 1];
+            par->ds_small_node.erase(par->ds_small_node.begin() + pos - 1);
+            tmp->ds_small_node.insert(tmp->ds_small_node.begin(), node_from_par);
+
+            small_node *node_from_child = cur->ds_small_node.back();
+            cur->ds_small_node.pop_back();
+            par->ds_small_node.insert(par->ds_small_node.begin() + pos - 1, node_from_child);
+
+            dfs_time(NULL);
+
+            set_new_postition(root, NULL, 1);
+
+            shift_tree_delete(NULL, NULL, NULL, 0.3f);
+
+            set_last_postition(root, NULL, 1);
+
+            ds_node.push_back(std::make_pair(node_from_child, 1));
+            ds_node.push_back(std::make_pair(node_from_par, 2));
+
+            change_color(ds_node, ds_edge, 0.1f);
+            ds_node.clear();
+        }
+        else if(pos < par->ds_big_node.size() - 1 && par->ds_big_node[pos + 1]->ds_small_node.size() >= 2) {
+            big_node *cur = par->ds_big_node[pos + 1];
+            small_node *node_from_par = par->ds_small_node[pos];
+            par->ds_small_node.erase(par->ds_small_node.begin() + pos);
+            tmp->ds_small_node.push_back(node_from_par);
+
+            small_node *node_from_child = cur->ds_small_node[0];
+            cur->ds_small_node.erase(cur->ds_small_node.begin());
+            par->ds_small_node.insert(par->ds_small_node.begin() + pos, node_from_child);
+
+            dfs_time(NULL);
+
+            set_new_postition(root, NULL, 1);
+
+            shift_tree_delete(NULL, NULL, NULL, 0.3f);
+
+            set_last_postition(root, NULL, 1);
+
+            ds_node.push_back(std::make_pair(node_from_child, 1));
+            ds_node.push_back(std::make_pair(node_from_par, 2));
+
+            change_color(ds_node, ds_edge, 0.1f);
+            ds_node.clear();
+        }
+        else {
+            if(pos > 0) {
+                //với thằng anh em đằng trước nó
+                //giữ lại anh em đằng trước nó
+
+                big_node *B = par->ds_big_node[pos - 1];
+
+                B->ds_small_node.push_back(par->ds_small_node[pos - 1]);
+                par->ds_small_node.erase(par->ds_small_node.begin() + pos - 1);
+
+                edge *canh = par->ds_edge[pos - 1];
+                par->ds_edge.erase(par->ds_edge.begin() + pos - 1);
+
+                B->ds_small_node.push_back(tmp->ds_small_node[0]);
+                tmp->ds_small_node.pop_back();
+
+                delete canh;
+
+                if(tmp->ds_edge.size()) {
+                    B->ds_edge.push_back(tmp->ds_edge[0]);
+                    B->ds_edge.push_back(tmp->ds_edge[1]);
+                    tmp->ds_edge.pop_back();
+                    tmp->ds_edge.pop_back();
+                }
+
+                if(tmp->ds_big_node.size()) {
+                    B->ds_big_node.push_back(tmp->ds_big_node[0]);
+                    B->ds_big_node.push_back(tmp->ds_big_node[1]);
+                    tmp->ds_big_node.pop_back();
+                    tmp->ds_big_node.pop_back();
+                }
+
+                par->ds_big_node.erase(par->ds_big_node.begin() + pos);
+
+                delete tmp;
+
+                tmp = B;
+
+                dfs_time(NULL);
+
+                set_new_postition(root, NULL, 1);
+
+                shift_tree_delete(NULL, NULL, NULL, 0.3f);
+
+                set_last_postition(root, NULL, 1);
+
+
+                for(int i = 0; i < tmp->ds_small_node.size(); i++) {
+                    ds_node.push_back(std::make_pair(tmp->ds_small_node[i], 2));
+                }
+
+                for(int i = 0; i < par->ds_big_node.size(); i++) {
+                    if(par->ds_big_node[i] == tmp) {
+                        ds_edge.push_back(std::make_pair(par->ds_edge[i], 1));
+                    }
+                }
+
+                change_color(ds_node, ds_edge, 0.1f);
+                ds_node.clear();
+                ds_edge.clear();
+            }
+            else {
+                //với thằng anh em sau nó
+                //giữ lại  nó
+
+                big_node *B = par->ds_big_node[pos + 1];
+
+                tmp->ds_small_node.push_back(par->ds_small_node[pos]);
+                par->ds_small_node.erase(par->ds_small_node.begin() + pos);
+
+                edge *canh = par->ds_edge[pos];
+                par->ds_edge.erase(par->ds_edge.begin() + pos);
+
+                tmp->ds_small_node.push_back(B->ds_small_node[0]);
+                B->ds_small_node.pop_back();
+
+                delete canh;
+
+                if(B->ds_edge.size()) {
+                    tmp->ds_edge.push_back(B->ds_edge[0]);
+                    tmp->ds_edge.push_back(B->ds_edge[1]);
+                    B->ds_edge.pop_back();
+                    B->ds_edge.pop_back();
+                }
+
+                if(B->ds_big_node.size()) {
+                    tmp->ds_big_node.push_back(B->ds_big_node[0]);
+                    tmp->ds_big_node.push_back(B->ds_big_node[1]);
+                    B->ds_big_node.pop_back();
+                    B->ds_big_node.pop_back();
+                }
+
+                par->ds_big_node.erase(par->ds_big_node.begin() + pos + 1);
+
+                delete B;
+
+                dfs_time(NULL);
+
+                set_new_postition(root, NULL, 1);
+
+                shift_tree_delete(NULL, NULL, NULL, 0.3f);
+
+                set_last_postition(root, NULL, 1);
+
+
+                for(int i = 0; i < tmp->ds_small_node.size(); i++) {
+                    ds_node.push_back(std::make_pair(tmp->ds_small_node[i], 2));
+                }
+
+                for(int i = 0; i < par->ds_big_node.size(); i++) {
+                    if(par->ds_big_node[i] == tmp) {
+                        ds_edge.push_back(std::make_pair(par->ds_edge[i], 1));
+                    }
+                }
+
+                change_color(ds_node, ds_edge, 0.1f);
+                ds_node.clear();
+                ds_edge.clear();
+            }
+        }
+    }
+
+    int pos = 0;
+
+    while(pos < tmp->ds_small_node.size() && tmp->ds_small_node[pos]->val < val) pos++;
+
+    if(pos < tmp->ds_small_node.size() && tmp->ds_small_node[pos]->val == val) {
+        if(tmp->ds_big_node.size() == 0) {
+            dfs_time(tmp->ds_small_node[pos]);
+
+            set_new_postition(root, tmp->ds_small_node[pos], 1);
+
+            shift_tree_delete(NULL, NULL, tmp->ds_small_node[pos], 0.3f);
+
+            tmp->ds_small_node.erase(tmp->ds_small_node.begin() + pos);
+
+            set_last_postition(root, NULL, 1);
+        }
+        else {
+            int new_val = get_minn(tmp->ds_big_node[pos + 1]);
+            tmp->ds_small_node[pos]->val = new_val;
+            dfs_delete(tmp->ds_big_node[pos + 1], tmp, tmp->ds_edge[pos + 1], new_val);
+        }
+    }
+    else if(tmp->ds_big_node.size()) {
+        dfs_delete(tmp->ds_big_node[pos], tmp, tmp->ds_edge[pos], val);
+    }
+
+    for(int i = 0; i < tmp->ds_small_node.size(); i++) {
+        ds_node.push_back(std::make_pair(tmp->ds_small_node[i], 2));
+    }
+
+    change_color(ds_node, ds_edge, 0.3f);
+    ds_node.clear();
+
+    for(int i = 0; i < tmp->ds_small_node.size(); i++) {
+        ds_node.push_back(std::make_pair(tmp->ds_small_node[i], 0));
+    }
+
+    if(canh != NULL) ds_edge.push_back(std::make_pair(canh, 0));
+
+    change_color(ds_node, ds_edge, 0.3f);
+    ds_node.clear();
+
+
+}
+
+
+void BtreeScreen::delete_btree(int val) {
+    reset_color(root);
+    btree_state.push_back(copy_root(root));
+    
+
+    if(root == NULL) return;
+
+    //TH đặc biệt
+    //chỉ có 1 nút root
+
+    if(root->ds_big_node.size() == 0) {
+        only_root(val);
+    }
+    else {
+        //nếu root của nó chỉ có 1 giá trị và 2 con của nó cũng vậy thì gộp lại trước
+        if(root->ds_small_node.size() == 2 && root->ds_big_node[0]->ds_small_node.size() == 1 && root->ds_big_node[1]->ds_small_node.size() == 1) {
+            big_node *B = root->ds_big_node[0];
+            big_node *C = root->ds_big_node[0];
+
+            B->ds_small_node.push_back(root->ds_small_node[0]);
+            B->ds_small_node.push_back(C->ds_small_node[0]);
+
+            root->ds_small_node.pop_back();
+            C->ds_small_node.pop_back();
+
+            B->ds_edge.push_back(C->ds_edge[0]);
+            B->ds_edge.push_back(C->ds_edge[1]);
+
+            C->ds_edge.pop_back();
+            C->ds_edge.pop_back();
+
+            B->ds_big_node.push_back(C->ds_big_node[0]);
+            B->ds_big_node.push_back(C->ds_big_node[1]);
+
+            C->ds_big_node.pop_back();
+            C->ds_big_node.pop_back();
+
+            delete C;
+
+            while(root->ds_edge.size()) {
+                delete root->ds_edge.back();
+                root->ds_edge.pop_back();
+            }
+
+            delete root;
+
+            root = B;
+
+            set_new_postition(root, NULL, 1);
+
+            shift_tree_delete(NULL, NULL, NULL, 0.3f);
+
+            set_last_postition(root, NULL, 1);
+
+        }
+
+
+        if(root->ds_big_node.size() == 0) {
+            only_root(val);
+        }
+        else {
+            //bắt đầu dfs xử lí
+
+            dfs_delete(root, NULL, NULL, val);
+        }
+    }
+}
+
 
 
 void BtreeScreen::run() {
@@ -1172,25 +1558,23 @@ void BtreeScreen::Update() {
     }
 
 
-    /*
+    
     //go delete
     if(ds[26].clicked && ds[26].disable == 0) {
-        reset_color(root);
-        clear_state();
-        avl_state.push_back(copy_root(root));
+        reset_state();
         cur_state = 0;
         int tmp = 0;
         for(int i = 0; i < ds[25].text.size(); i++) {
             tmp = tmp * 10 + ds[25].text[i] - '0';
         }
-        delete_avl(tmp);
+        delete_btree(tmp);
         ds[26].clicked = 0;
         is_play = 1;
         ds[13].disable = 0;
         ds[12].disable = 1;
         ds[11].disable = 1;
     }
-    */
+    
 
 
     //full_back

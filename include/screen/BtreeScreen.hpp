@@ -143,6 +143,14 @@ private:
     void search_btree(int val);
     bool dfs_find(big_node *tmp, big_node *par, edge *canh, int val);
 
+//deletion
+private:
+    void delete_btree(int val);
+    void shift_tree_delete(edge *edge_1, edge* edge_2, small_node *node_1, float time);
+    void only_root(int val);
+    void dfs_delete(big_node *tmp, big_node *par, edge *canh, int val);
+    int get_minn(big_node *tmp);
+
 //text
 private:
     FontHolder &MyFont;
