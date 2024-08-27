@@ -55,7 +55,7 @@ void MenuScreen::ProcessEvent()
                         avlscreen.run();
                     }
                     else if (i == 3 && sprite.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
-                        BtreeScreen btreescreen(mWindow, MyTexture);
+                        BtreeScreen btreescreen(mWindow, MyTexture, MyFont);
                         btreescreen.run();
                     }
                     else if (i == 4 && sprite.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) {
