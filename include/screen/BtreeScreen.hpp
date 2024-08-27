@@ -124,9 +124,24 @@ private:
     int time_dfs = 0;
     void dfs_time(small_node *block);
     void dfs(big_node *tmp, small_node *block);
-    void set_new_postition();
-    void set_last_postition();
+    void set_new_postition(big_node *tmp, small_node *block, int hi);
+    void set_last_postition(big_node *tmp, small_node *block, int hi);
+    int dfs_minn(big_node *tmp);
+    int dfs_maxx(big_node *tmp);
 
+    void insert_btree(int val);
+    void shift_tree_insert(edge *edge_1, edge* edge_2, small_node *node_1, float time);
+    //tối đa 2 cạnh mới được tạo ra, và 1 nút mới 
+    void dfs_shift_tree(big_node *tmp, float per);
+
+    bool dfs_insert(big_node *tmp, big_node *par, edge *canh, int val);
+
+    void change_color(std::vector<std::pair<small_node*, int>> &ds_node, std::vector<std::pair<edge*, int>> &ds_edge, float time);
+
+//search
+private:
+    void search_btree(int val);
+    bool dfs_find(big_node *tmp, big_node *par, edge *canh, int val);
 
 //text
 private:
@@ -149,9 +164,13 @@ private:
 
 //animation
 private:
-    //int cur_state = 0;
-    //std::vector<node*>avl_state;
-    //void clear_state();
+    int cur_state = 0;
+    std::vector<big_node*>btree_state;
+    void reset_state();
+    void draw_btree(big_node *tmp);
+    void draw_node(small_node *tmp);
+    void draw_edge(edge *tmp);
+    void reset_color(big_node *tmp);
 };
 
 
