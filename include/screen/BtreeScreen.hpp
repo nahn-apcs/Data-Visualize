@@ -126,8 +126,8 @@ private:
     void dfs(big_node *tmp, small_node *block);
     void set_new_postition(big_node *tmp, small_node *block, int hi);
     void set_last_postition(big_node *tmp, small_node *block, int hi);
-    int dfs_minn(big_node *tmp);
-    int dfs_maxx(big_node *tmp);
+    int dfs_minn(big_node *tmp, small_node *block);
+    int dfs_maxx(big_node *tmp, small_node *block);
 
     void insert_btree(int val);
     void shift_tree_insert(edge *edge_1, edge* edge_2, small_node *node_1, float time);

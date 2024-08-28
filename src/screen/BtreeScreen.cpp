@@ -97,14 +97,23 @@ void BtreeScreen::dfs_time(small_node *block) {
     dfs(root, block);
 }
 
-int BtreeScreen::dfs_minn(big_node *tmp) {
-    if(tmp->ds_big_node.size() == 0) return tmp->ds_small_node[0]->nx_pos_x;
-    else return dfs_minn(tmp->ds_big_node[0]);
+int BtreeScreen::dfs_minn(big_node *tmp, small_node *block) {
+    if(tmp->ds_big_node.size() == 0) {
+        if(tmp->ds_small_node[0] == block) return tmp->ds_small_node[1]->nx_pos_x;
+        return tmp->ds_small_node[0]->nx_pos_x;
+    }
+    else return dfs_minn(tmp->ds_big_node[0], block);
 }
 
-int BtreeScreen::dfs_maxx(big_node *tmp) {
-    if(tmp->ds_big_node.size() == 0) return tmp->ds_small_node.back()->nx_pos_x;
-    else return dfs_maxx(tmp->ds_big_node.back());
+int BtreeScreen::dfs_maxx(big_node *tmp, small_node *block) {
+    if(tmp->ds_big_node.size() == 0) {
+        
+        int sz = tmp->ds_small_node.size();
+
+        if(tmp->ds_small_node.back() == block) return tmp->ds_small_node[sz - 2]->nx_pos_x;
+        return tmp->ds_small_node.back()->nx_pos_x;
+    }
+    else return dfs_maxx(tmp->ds_big_node.back(), block);
 }
 
 void BtreeScreen::set_new_postition(big_node *tmp, small_node *block, int hi) {
@@ -136,7 +145,7 @@ void BtreeScreen::set_new_postition(big_node *tmp, small_node *block, int hi) {
 
         int len = 34 * tmp->ds_small_node.size();
 
-        int mid = (dfs_minn(tmp) + dfs_maxx(tmp)) / 2;
+        int mid = (dfs_minn(tmp, block) + dfs_maxx(tmp, block)) / 2;
 
         int begin = mid - len / 2;
 
@@ -202,7 +211,7 @@ void BtreeScreen::set_last_postition(big_node *tmp, small_node *block, int hi) {
 
         int len = 34 * tmp->ds_small_node.size();
 
-        int mid = (dfs_minn(tmp) + dfs_maxx(tmp)) / 2;
+        int mid = (dfs_minn(tmp, block) + dfs_maxx(tmp, block)) / 2;
 
         int begin = mid - len / 2;
 
@@ -802,6 +811,8 @@ void BtreeScreen::only_root(int val) {
 
         shift_tree_delete(NULL, NULL, root->ds_small_node[pos], 0.3f);
 
+        delete root->ds_small_node[pos];
+
         root->ds_small_node.erase(root->ds_small_node.begin() + pos);
 
         set_last_postition(root, NULL, 1);
@@ -853,7 +864,7 @@ void BtreeScreen::dfs_delete(big_node *tmp, big_node *par, edge *canh, int val) 
     ds_edge.clear();
 
     //nếu nó ko đủ 2 giá trị
-    if(tmp->ds_small_node.size() == 1) {
+    if(tmp->ds_small_node.size() == 1 && tmp != root) {
         //TH1: kiểm tra anh em của nó có ai có nhiều hơn 2 giá trị ko
 
         int pos = 0;
@@ -866,6 +877,8 @@ void BtreeScreen::dfs_delete(big_node *tmp, big_node *par, edge *canh, int val) 
         }
 
         if(pos > 0 && par->ds_big_node[pos - 1]->ds_small_node.size() >= 2) {
+
+
             big_node *cur = par->ds_big_node[pos - 1];
             small_node *node_from_par = par->ds_small_node[pos - 1];
             par->ds_small_node.erase(par->ds_small_node.begin() + pos - 1);
@@ -874,6 +887,15 @@ void BtreeScreen::dfs_delete(big_node *tmp, big_node *par, edge *canh, int val) 
             small_node *node_from_child = cur->ds_small_node.back();
             cur->ds_small_node.pop_back();
             par->ds_small_node.insert(par->ds_small_node.begin() + pos - 1, node_from_child);
+            if(cur->ds_edge.size()) {
+                tmp->ds_edge.insert(tmp->ds_edge.begin(), cur->ds_edge.back());
+                cur->ds_edge.pop_back();
+            }
+
+            if(cur->ds_big_node.size()) {
+                tmp->ds_big_node.insert(tmp->ds_big_node.begin(), cur->ds_big_node.back());
+                cur->ds_big_node.pop_back();
+            }
 
             dfs_time(NULL);
 
@@ -890,6 +912,8 @@ void BtreeScreen::dfs_delete(big_node *tmp, big_node *par, edge *canh, int val) 
             ds_node.clear();
         }
         else if(pos < par->ds_big_node.size() - 1 && par->ds_big_node[pos + 1]->ds_small_node.size() >= 2) {
+
+
             big_node *cur = par->ds_big_node[pos + 1];
             small_node *node_from_par = par->ds_small_node[pos];
             par->ds_small_node.erase(par->ds_small_node.begin() + pos);
@@ -898,6 +922,16 @@ void BtreeScreen::dfs_delete(big_node *tmp, big_node *par, edge *canh, int val) 
             small_node *node_from_child = cur->ds_small_node[0];
             cur->ds_small_node.erase(cur->ds_small_node.begin());
             par->ds_small_node.insert(par->ds_small_node.begin() + pos, node_from_child);
+
+            if(cur->ds_edge.size()) {
+                tmp->ds_edge.push_back(cur->ds_edge[0]);
+                cur->ds_edge.erase(cur->ds_edge.begin());
+            }
+
+            if(cur->ds_big_node.size()) {
+                tmp->ds_big_node.push_back(cur->ds_big_node[0]);
+                cur->ds_big_node.erase(cur->ds_big_node.begin());
+            }
 
             dfs_time(NULL);
 
@@ -923,13 +957,13 @@ void BtreeScreen::dfs_delete(big_node *tmp, big_node *par, edge *canh, int val) 
                 B->ds_small_node.push_back(par->ds_small_node[pos - 1]);
                 par->ds_small_node.erase(par->ds_small_node.begin() + pos - 1);
 
-                edge *canh = par->ds_edge[pos - 1];
+                edge *canh_1 = par->ds_edge[pos - 1];
                 par->ds_edge.erase(par->ds_edge.begin() + pos - 1);
 
                 B->ds_small_node.push_back(tmp->ds_small_node[0]);
                 tmp->ds_small_node.pop_back();
 
-                delete canh;
+                delete canh_1;
 
                 if(tmp->ds_edge.size()) {
                     B->ds_edge.push_back(tmp->ds_edge[0]);
@@ -966,6 +1000,7 @@ void BtreeScreen::dfs_delete(big_node *tmp, big_node *par, edge *canh, int val) 
 
                 for(int i = 0; i < par->ds_big_node.size(); i++) {
                     if(par->ds_big_node[i] == tmp) {
+                        canh = par->ds_edge[i];
                         ds_edge.push_back(std::make_pair(par->ds_edge[i], 1));
                     }
                 }
@@ -983,13 +1018,13 @@ void BtreeScreen::dfs_delete(big_node *tmp, big_node *par, edge *canh, int val) 
                 tmp->ds_small_node.push_back(par->ds_small_node[pos]);
                 par->ds_small_node.erase(par->ds_small_node.begin() + pos);
 
-                edge *canh = par->ds_edge[pos];
+                edge *canh_1 = par->ds_edge[pos];
                 par->ds_edge.erase(par->ds_edge.begin() + pos);
 
                 tmp->ds_small_node.push_back(B->ds_small_node[0]);
                 B->ds_small_node.pop_back();
 
-                delete canh;
+                delete canh_1;
 
                 if(B->ds_edge.size()) {
                     tmp->ds_edge.push_back(B->ds_edge[0]);
@@ -1024,6 +1059,7 @@ void BtreeScreen::dfs_delete(big_node *tmp, big_node *par, edge *canh, int val) 
 
                 for(int i = 0; i < par->ds_big_node.size(); i++) {
                     if(par->ds_big_node[i] == tmp) {
+                        canh = par->ds_edge[i];
                         ds_edge.push_back(std::make_pair(par->ds_edge[i], 1));
                     }
                 }
@@ -1076,6 +1112,7 @@ void BtreeScreen::dfs_delete(big_node *tmp, big_node *par, edge *canh, int val) 
 
     change_color(ds_node, ds_edge, 0.3f);
     ds_node.clear();
+    ds_edge.clear();
 
 
 }
@@ -1096,9 +1133,11 @@ void BtreeScreen::delete_btree(int val) {
     }
     else {
         //nếu root của nó chỉ có 1 giá trị và 2 con của nó cũng vậy thì gộp lại trước
-        if(root->ds_small_node.size() == 2 && root->ds_big_node[0]->ds_small_node.size() == 1 && root->ds_big_node[1]->ds_small_node.size() == 1) {
+        if(root->ds_small_node.size() == 1 && root->ds_big_node[0]->ds_small_node.size() == 1 && root->ds_big_node[1]->ds_small_node.size() == 1) {
+
+
             big_node *B = root->ds_big_node[0];
-            big_node *C = root->ds_big_node[0];
+            big_node *C = root->ds_big_node[1];
 
             B->ds_small_node.push_back(root->ds_small_node[0]);
             B->ds_small_node.push_back(C->ds_small_node[0]);
@@ -1106,17 +1145,21 @@ void BtreeScreen::delete_btree(int val) {
             root->ds_small_node.pop_back();
             C->ds_small_node.pop_back();
 
-            B->ds_edge.push_back(C->ds_edge[0]);
-            B->ds_edge.push_back(C->ds_edge[1]);
+            if(C->ds_edge.size()) {
+                B->ds_edge.push_back(C->ds_edge[0]);
+                B->ds_edge.push_back(C->ds_edge[1]);
 
-            C->ds_edge.pop_back();
-            C->ds_edge.pop_back();
+                C->ds_edge.pop_back();
+                C->ds_edge.pop_back();
+            }
 
-            B->ds_big_node.push_back(C->ds_big_node[0]);
-            B->ds_big_node.push_back(C->ds_big_node[1]);
+            if(C->ds_big_node.size()) {
+                B->ds_big_node.push_back(C->ds_big_node[0]);
+                B->ds_big_node.push_back(C->ds_big_node[1]);
 
-            C->ds_big_node.pop_back();
-            C->ds_big_node.pop_back();
+                C->ds_big_node.pop_back();
+                C->ds_big_node.pop_back();
+            }
 
             delete C;
 
@@ -1124,10 +1167,15 @@ void BtreeScreen::delete_btree(int val) {
                 delete root->ds_edge.back();
                 root->ds_edge.pop_back();
             }
+            while(root->ds_big_node.size()) {
+                root->ds_big_node.pop_back();
+            }
 
             delete root;
 
             root = B;
+
+            dfs_time(NULL);
 
             set_new_postition(root, NULL, 1);
 
@@ -1460,6 +1508,11 @@ void BtreeScreen::Update() {
             }
         }
 
+        reset_color(root);
+        reset_state();
+        cur_state = 0;
+        btree_state.push_back(copy_root(root));
+
         delete[]ok;
         ds[19].clicked = 0;
         is_play = 1;
@@ -1513,6 +1566,11 @@ void BtreeScreen::Update() {
             for(int i = 0; i < a.size(); i++) {
                 insert_btree(a[i]);
             }
+
+            reset_color(root);
+            reset_state();
+            cur_state = 0;
+            btree_state.push_back(copy_root(root));
 
 
             fin.close();
