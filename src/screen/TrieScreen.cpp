@@ -263,7 +263,7 @@ bool TrieScreen::dfs_search(node *tmp, node *par, const std::string& s, int cur)
         }
         else {
             int ok = dfs_search(tmp->c[kt], tmp, s, cur + 1);
-            change_color_and_edge(tmp, 0.3f, 2, 1);
+            //change_color_and_edge(tmp, 0.3f, 2, 1);
 
             if(ok == 0) {
                 change_color_and_edge(tmp, 0.3f, 0, 0);
