@@ -17,6 +17,7 @@ void AVLScreen::clear_root(node *tmp) {
     clear_root(tmp->Left);
     clear_root(tmp->Right);
     delete tmp;
+    tmp = NULL;
 }
 
 AVLScreen::node *AVLScreen::copy_root(node *tmp) {
@@ -768,10 +769,24 @@ void AVLScreen::Update() {
             n = n * 10 + ds[17].text[i] - '0';
         }
 
-        for(int i = 1; i <= n; i++) {
+        bool *kt = new bool[100];
+        for(int i = 0; i < 100; i++) kt[i] = 0;
+
+        while(n) {
             int val = rand_2(1, 99);
-            insert_avl(val);
+            if(!kt[val]) {
+                kt[val] = 1;
+                insert_avl(val);
+                n--;
+            }
         }
+
+        delete[] kt;
+
+        clear_state();
+        avl_state.push_back(copy_root(root));
+        cur_state = 0;
+
         ds[19].clicked = 0;
         is_play = 1;
         ds[13].disable = 0;
@@ -824,6 +839,13 @@ void AVLScreen::Update() {
             for(int i = 0; i < a.size(); i++) {
                 insert_avl(a[i]);
             }
+
+            a.clear();
+
+            clear_state();
+            avl_state.push_back(copy_root(root));
+            cur_state = 0;
+
 
 
             fin.close();

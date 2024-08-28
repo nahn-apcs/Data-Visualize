@@ -425,6 +425,19 @@ void HashScreen::Update() {
             int val = rand_1(1, 99);
             insert_hash(val);
         }
+
+        while(hash_state.size()) {
+            reset_ds_node(hash_state.back());
+            hash_state.pop_back();
+        }
+        cur_state = 0;
+
+        reset_color();
+
+        std::vector<node>tmp;
+        copy_ds_node(tmp);
+        hash_state.push_back(tmp);
+
         ds[21].clicked = 0;
         is_play = 1;
         ds[13].disable = 0;
@@ -483,6 +496,18 @@ void HashScreen::Update() {
             for(int i = 0; i < a.size(); i++) {
                 insert_hash(a[i]);
             }
+
+            while(hash_state.size()) {
+                reset_ds_node(hash_state.back());
+                hash_state.pop_back();
+            }
+            cur_state = 0;
+
+            reset_color();
+
+            std::vector<node>tmp;
+            copy_ds_node(tmp);
+            hash_state.push_back(tmp);
 
 
             fin.close();

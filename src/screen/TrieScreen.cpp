@@ -704,6 +704,12 @@ void TrieScreen::Update() {
             }
             insert_trie(s);
         }
+
+        reset_color(root);
+        clear_state();
+        cur_state = 0;
+        trie_state.push_back(copy_root(root));
+
         ds[19].clicked = 0;
         is_play = 1;
         ds[13].disable = 0;
@@ -746,6 +752,11 @@ void TrieScreen::Update() {
                     insert_trie(s);
                 }
             }
+
+            reset_color(root);
+            clear_state();
+            cur_state = 0;
+            trie_state.push_back(copy_root(root));
 
 
 

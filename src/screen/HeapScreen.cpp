@@ -356,6 +356,14 @@ void HeapScreen::Update() {
                 for(int i = 0; i < a.size(); i++) {
                     insert_heap(a[i]);
                 }
+
+                for(int i = 0; i < ds_node.size(); i++) ds_node[i].now = ds_node[i].next = 0;
+                tree_state.clear();
+                postition_state.clear();
+                cur_state = 0;
+                tree_state.push_back(ds_node);
+                postition_state.push_back(ds_node);
+
                 is_play = 1;
                 ds[14].disable = 0;
                 ds[13].disable = 1;
@@ -384,6 +392,17 @@ void HeapScreen::Update() {
             int val = rand_4(1, 99);
             insert_heap(val);
         }
+
+        for(int i = 0; i < ds_node.size(); i++) ds_node[i].now = ds_node[i].next = 0;
+        tree_state.clear();
+        postition_state.clear();
+        cur_state = 0;
+        tree_state.push_back(ds_node);
+        postition_state.push_back(ds_node);
+
+        
+
+
         ds[21].clicked = 0;
         is_play = 1;
         ds[14].disable = 0;
