@@ -121,7 +121,7 @@ void GraphScreen::set_position() {
 
     std::vector<sf::Vector2f> sum_F(num_node, sf::Vector2f(0, 0));
 
-    float c_rep = 10000;
+    float c_rep = 40000;
     float c_spring = 1;
 
 
@@ -147,7 +147,7 @@ void GraphScreen::set_position() {
         sf::Vector2f F_rep =  unit_vector(u, v) * c_rep / (len * len);
 
 
-        sf::Vector2f F_attr = c_spring * log(len / 100) * unit_vector(u, v);
+        sf::Vector2f F_attr = c_spring * log(len / 50) * unit_vector(u, v);
         sum_F[ds_edge[i]->u->val - 1] += F_attr;
         sum_F[ds_edge[i]->v->val - 1] -= F_attr;
     }
@@ -158,7 +158,7 @@ void GraphScreen::set_position() {
     for(int i = 0; i < num_node; i++) {
         sf::Vector2f center(800, 400);
 
-        float c_rep = 0.01;
+        float c_rep = 0.03;
         sf::Vector2f direct = center;
         direct.x -= ds_node[i]->pos_x;
         direct.y -= ds_node[i]->pos_y;
@@ -179,7 +179,7 @@ void GraphScreen::set_position() {
 
             float len = length(u, v);
 
-            sf::Vector2f F_rep = 1000 / len / len * unit_vector(u, v);
+            sf::Vector2f F_rep = 4000 / len / len * unit_vector(u, v);
 
             sum_F[ds_edge[i]->u->val - 1] -= F_rep;
             sum_F[ds_edge[i]->v->val - 1] -= F_rep;
@@ -198,7 +198,7 @@ void GraphScreen::set_position() {
 
                 float len = length(u, v);
 
-                sf::Vector2f F_rep = 1000 / len / len * unit_vector(u, v);
+                sf::Vector2f F_rep = 4000 / len / len * unit_vector(u, v);
 
                 sum_F[ds_edge[i]->u->val - 1] -= F_rep / 2.0f;
                 sum_F[ds_edge[i]->v->val - 1] -= F_rep / 2.0f;
